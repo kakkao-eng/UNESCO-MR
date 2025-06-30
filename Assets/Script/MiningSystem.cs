@@ -1,78 +1,295 @@
-﻿using UnityEngine;
-using UnityEngine.InputSystem; // Add this for new Input System
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
+using UnityEngine.InputSystem;
 
-// Ensure FossilBehavior is defined and inherits from MonoBehaviour
-public class FossilBehavior : MonoBehaviour
+namespace MiningSystem
 {
-    public void CheckExposure()
+    /// <summary>
+    /// ระบบขุดแบบทดสอบสำหรับ Mixed Reality โดยใช้ XR Origin
+    /// ยิงเลเซอร์ไปที่ Cube เพื่อทำการขุด
+    /// </summary>
+    public class MiningSystem : MonoBehaviour
     {
-        // Implementation for checking fossil exposure
-    }
-}
+        [Header("Mining Settings")]
+        [SerializeField]
+        [Tooltip("ระยะของเลเซอร์ขุด")]
+        float m_MiningRange = 10f;
 
-public class MiningSystem : MonoBehaviour
-{
-    [Header("การตั้งค่าการขุด")]
-    [SerializeField] private float digRadius = 0.5f; // รัศมีการขุด
-    [SerializeField] private float digStrength = 0.2f; // ความแรงในการขุด
-    [SerializeField] private float digSpeed = 0.1f; // ความเร็วในการขุด
+        [SerializeField]
+        [Tooltip("พลังในการขุดต่อวินาที")]
+        float m_MiningPower = 1f;
 
-    [Header("การตรวจจับ")]
-    [SerializeField] private LayerMask groundLayer; // เลเยอร์ของพื้นที่ขุดได้
-    [SerializeField] private float detectionRadius = 1f; // รัศมีการตรวจจับฟอสซิล
+        [SerializeField]
+        [Tooltip("เลเยอร์ที่สามารถขุดได้")]
+        LayerMask m_MineableLayer = 1;
 
-    private float nextDigTime;
-    private MeshDeformer currentDeformer;
+        [Header("Laser Visual")]
+        [SerializeField]
+        [Tooltip("LineRenderer สำหรับแสดงเลเซอร์")]
+        LineRenderer m_LaserRenderer;
 
-    private void Update()
-    {
-        if (Time.time < nextDigTime) return;
+        [SerializeField]
+        [Tooltip("สีของเลเซอร์")]
+        Color m_LaserColor = Color.red;
 
-        // Using new Input System
-        if (Mouse.current.leftButton.isPressed)
+        [SerializeField]
+        [Tooltip("ความกว้างของเลเซอร์")]
+        float m_LaserWidth = 0.02f;
+
+        [Header("XR Components")]
+        [SerializeField]
+        [Tooltip("Ray Interactor สำหรับตรวจจับการชี้")]
+        XRRayInteractor m_RayInteractor;
+
+        [Header("Input Actions")]
+        [SerializeField]
+        [Tooltip("Input Action สำหรับการขุด (Trigger/Mouse Click)")]
+        InputActionReference m_MiningInputAction;
+
+        [Header("Effects")]
+        [SerializeField]
+        [Tooltip("เอฟเฟกต์อนุภาคเมื่อขุด")]
+        ParticleSystem m_MiningEffects;
+
+        [SerializeField]
+        [Tooltip("เสียงเมื่อขุด")]
+        AudioSource m_MiningAudioSource;
+
+        // Private variables
+        MinableCube m_CurrentTarget;
+        bool m_IsMining;
+        Vector3 m_LaserStartPoint;
+        Vector3 m_LaserEndPoint;
+        
+        // Input System variables
+        bool m_TriggerPressed;
+
+        /// <summary>
+        /// See <see cref="MonoBehaviour"/>.
+        /// </summary>
+        void Start()
         {
-            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 10f, groundLayer))
+            InitializeLaser();
+            InitializeInputSystem();
+
+            // ถ้าไม่มี Ray Interactor ให้ค้นหาใน GameObject
+            if (m_RayInteractor == null)
+                m_RayInteractor = GetComponentInChildren<XRRayInteractor>();
+        }
+
+        /// <summary>
+        /// See <see cref="MonoBehaviour"/>.
+        /// </summary>
+        void Update()
+        {
+            HandleMiningInput();
+            UpdateLaser();
+        }
+
+        /// <summary>
+        /// See <see cref="MonoBehaviour"/>.
+        /// </summary>
+        void OnEnable()
+        {
+            EnableInputActions();
+        }
+
+        /// <summary>
+        /// See <see cref="MonoBehaviour"/>.
+        /// </summary>
+        void OnDisable()
+        {
+            DisableInputActions();
+        }
+
+        void InitializeLaser()
+        {
+            if (m_LaserRenderer == null)
             {
-                Dig(hit.point);
-                CheckForFossils(hit.point);
-                nextDigTime = Time.time + digSpeed;
+                // สร้าง LineRenderer ใหม่ถ้าไม่มี
+                GameObject laserObject = new GameObject("Mining Laser");
+                laserObject.transform.SetParent(transform);
+                m_LaserRenderer = laserObject.AddComponent<LineRenderer>();
+            }
+
+            // ตั้งค่า LineRenderer
+            m_LaserRenderer.material = new Material(Shader.Find("Sprites/Default"));
+            m_LaserRenderer.startColor = m_LaserColor;
+            m_LaserRenderer.endColor = m_LaserColor;
+            m_LaserRenderer.startWidth = m_LaserWidth;
+            m_LaserRenderer.endWidth = m_LaserWidth;
+            m_LaserRenderer.positionCount = 2;
+            m_LaserRenderer.enabled = false;
+        }
+
+        void InitializeInputSystem()
+        {
+            // ถ้าไม่มี Mining Input Action ให้สร้างขึ้นมาใหม่
+            if (m_MiningInputAction == null)
+            {
+                Debug.LogWarning("Mining Input Action not assigned. Using fallback method.");
             }
         }
-    }
 
-    private void Dig(Vector3 position)
-    {
-        // หา MeshDeformer ในพื้นที่ที่จะขุด
-        var deformer = GetDeformerAtPosition(position);
-        if (deformer != null)
+        void EnableInputActions()
         {
-            deformer.DeformMeshAtPoint(position); // Updated to use the correct method
-        }
-    }
-
-    private void CheckForFossils(Vector3 digPosition)
-    {
-        // ตรวจสอบฟอสซิลในรัศมีการขุด
-        Collider[] colliders = Physics.OverlapSphere(digPosition, detectionRadius);
-        foreach (var collider in colliders)
-        {
-            if (collider.TryGetComponent<FossilBehavior>(out var fossil)) // Use TryGetComponent to avoid allocation
+            if (m_MiningInputAction != null)
             {
-                fossil.CheckExposure();
+                m_MiningInputAction.action.Enable();
             }
         }
-    }
 
-    private MeshDeformer GetDeformerAtPosition(Vector3 position)
-    {
-        // ค้นหา MeshDeformer ในพื้นที่
-        Collider[] colliders = Physics.OverlapSphere(position, digRadius);
-        foreach (var collider in colliders)
+        void DisableInputActions()
         {
-            var deformer = collider.GetComponent<MeshDeformer>();
-            if (deformer != null)
-                return deformer;
+            if (m_MiningInputAction != null)
+            {
+                m_MiningInputAction.action.Disable();
+            }
         }
-        return null;
+
+        void HandleMiningInput()
+        {
+            // ตรวจสอบการกดปุ่ม Trigger หรือ Primary Button
+            bool triggerPressed = false;
+
+            // วิธีที่ 1: ใช้ Input Action Reference (แนะนำ)
+            if (m_MiningInputAction != null)
+            {
+                triggerPressed = m_MiningInputAction.action.IsPressed();
+            }
+            else
+            {
+                // วิธีที่ 2: ใช้ XR Input Devices
+                if (m_RayInteractor != null)
+                {
+                    var inputDevices = new List<UnityEngine.XR.InputDevice>();
+                    UnityEngine.XR.InputDevices.GetDevices(inputDevices);
+
+                    foreach (var device in inputDevices)
+                    {
+                        if (device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out bool triggerValue))
+                        {
+                            triggerPressed = triggerValue;
+                            break;
+                        }
+                    }
+                }
+
+                // วิธีที่ 3: ใช้ New Input System สำหรับ Mouse (fallback สำหรับ Simulator)
+                if (!triggerPressed)
+                {
+                    var mouse = Mouse.current;
+                    if (mouse != null)
+                    {
+                        triggerPressed = mouse.leftButton.isPressed;
+                    }
+                }
+            }
+
+            if (triggerPressed)
+                StartMining();
+            else
+                StopMining();
+        }
+
+        void StartMining()
+        {
+            // ยิง Raycast เพื่อหาเป้าหมาย
+            RaycastHit hit;
+            Vector3 rayOrigin = transform.position;
+            Vector3 rayDirection = transform.forward;
+
+            if (m_RayInteractor != null)
+            {
+                rayOrigin = m_RayInteractor.rayOriginTransform.position;
+                rayDirection = m_RayInteractor.rayOriginTransform.forward;
+            }
+
+            m_LaserStartPoint = rayOrigin;
+
+            if (Physics.Raycast(rayOrigin, rayDirection, out hit, m_MiningRange, m_MineableLayer))
+            {
+                m_LaserEndPoint = hit.point;
+
+                // ตรวจสอบว่าเป้าหมายเป็น MinableCube หรือไม่
+                MinableCube minableCube = hit.collider.GetComponent<MinableCube>();
+                if (minableCube != null)
+                {
+                    if (m_CurrentTarget != minableCube)
+                    {
+                        m_CurrentTarget = minableCube;
+                        StartMiningEffects(hit.point);
+                    }
+
+                    // ทำการขุด
+                    float damage = m_MiningPower * Time.deltaTime;
+                    m_CurrentTarget.TakeDamage(damage);
+                    m_IsMining = true;
+                }
+                else
+                {
+                    m_CurrentTarget = null;
+                    m_IsMining = false;
+                }
+            }
+            else
+            {
+                m_LaserEndPoint = rayOrigin + rayDirection * m_MiningRange;
+                m_CurrentTarget = null;
+                m_IsMining = false;
+            }
+
+            m_LaserRenderer.enabled = true;
+        }
+
+        void StopMining()
+        {
+            m_IsMining = false;
+            m_CurrentTarget = null;
+            m_LaserRenderer.enabled = false;
+            StopMiningEffects();
+        }
+
+        void UpdateLaser()
+        {
+            if (m_LaserRenderer.enabled)
+            {
+                m_LaserRenderer.SetPosition(0, m_LaserStartPoint);
+                m_LaserRenderer.SetPosition(1, m_LaserEndPoint);
+
+                // เปลี่ยนสีเลเซอร์ตามสถานะ
+                Color currentColor = m_IsMining ? Color.green : m_LaserColor;
+                m_LaserRenderer.startColor = currentColor;
+                m_LaserRenderer.endColor = currentColor;
+            }
+        }
+
+        void StartMiningEffects(Vector3 position)
+        {
+            // เริ่มเอฟเฟกต์อนุภาค
+            if (m_MiningEffects != null)
+            {
+                m_MiningEffects.transform.position = position;
+                if (!m_MiningEffects.isPlaying)
+                    m_MiningEffects.Play();
+            }
+
+            // เล่นเสียง
+            if (m_MiningAudioSource != null && !m_MiningAudioSource.isPlaying)
+                m_MiningAudioSource.Play();
+        }
+
+        void StopMiningEffects()
+        {
+            // หยุดเอฟเฟกต์อนุภาค
+            if (m_MiningEffects != null && m_MiningEffects.isPlaying)
+                m_MiningEffects.Stop();
+
+            // หยุดเสียง
+            if (m_MiningAudioSource != null && m_MiningAudioSource.isPlaying)
+                m_MiningAudioSource.Stop();
+        }
     }
 }
