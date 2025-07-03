@@ -21,17 +21,72 @@ public class SoilBlock : MonoBehaviour
 
     // เพิ่ม field ใหม่
     public float detectionRadius = 0.15f;
-    public LayerMask fossilLayer;
 
+    public event System.Action OnDestroyEvent;
+
+    [Header("Layer Settings")]
+    [Tooltip("Layer ที่จะใช้ตรวจจับ Fossil")]
+    public LayerMask fossilLayer = 1 << 6; // default to "Fossil" layer
+    
+    [Tooltip("Layer ที่จะกำหนดให้กับ soil block")]
+    public string soilLayerName = "Soil"; // default layer name for soil blocks
+
+    private Fossil nearbyFossil; // เพิ่มตัวแปรเก็บ reference ไปยัง Fossil ที่อยู่ใกล้
+
+    // Add this method right after the field declarations
+    private void InitializeRenderer()
+    {
+        if (rend != null)
+            return;
+        
+        rend = GetComponent<Renderer>();
+        if (rend == null)
+        {
+            Debug.LogError($"Missing Renderer component on {gameObject.name}. Adding MeshRenderer.", this);
+            rend = gameObject.AddComponent<MeshRenderer>();
+        }
+
+        // Ensure material is set
+        if (rend.material == null)
+        {
+            rend.material = new Material(Shader.Find("Standard"));
+        }
+    }
+
+    // Modify Start method
     void Start()
     {
-        rend = GetComponent<Renderer>();
-        CheckNearbyFossils(); // เช็คฟอสซิลตั้งแต่เริ่มต้น
+        // ตรวจสอบความถูกต้องของ Layer
+        if (LayerMask.NameToLayer("Fossil") == -1)
+        {
+            Debug.LogError("Missing 'Fossil' layer! Please add this layer in Project Settings.");
+        }
+        
+        if (LayerMask.NameToLayer(soilLayerName) == -1)
+        {
+            Debug.LogError($"Missing '{soilLayerName}' layer! Please add this layer in Project Settings.");
+        }
+
+        // กำหนด layer ให้กับ soil block
+        gameObject.layer = LayerMask.NameToLayer(soilLayerName);
+        
+        InitializeRenderer();
+        CheckNearbyFossils();
         UpdateColor();
     }
 
+    // Modify CheckNearbyFossils method to ensure renderer is initialized
     public void CheckNearbyFossils()
     {
+        InitializeRenderer(); // Add this line
+
+        // เพิ่ม Debug Log เพื่อตรวจสอบ
+        if (fossilLayer.value == 0)
+        {
+            Debug.LogWarning("FossilLayer is not set properly!");
+            return;
+        }
+
         // เช็คว่าบล็อกนี้อยู่ข้างใน Fossil ไหม
         Collider[] nearbyColliders = Physics.OverlapBox(
             transform.position,
@@ -42,7 +97,11 @@ public class SoilBlock : MonoBehaviour
 
         if (nearbyColliders.Length > 0)
         {
-            // ถ้าเจอว่าทับซ้อนกับ Fossil ให้ทำลายบล็อกนี้ทันที
+            foreach (var col in nearbyColliders)
+            {
+                // เพิ่ม Debug Log เพื่อตรวจสอบ
+                Debug.Log($"Found fossil collision with: {col.gameObject.name} on layer: {LayerMask.LayerToName(col.gameObject.layer)}");
+            }
             Destroy(gameObject);
             return;
         }
@@ -52,6 +111,8 @@ public class SoilBlock : MonoBehaviour
         if (nearbyColliders.Length > 0)
         {
             soilType = SoilType.NearFossil;
+            nearbyFossil = nearbyColliders[0].GetComponent<Fossil>(); // เพิ่มการเก็บ reference ไปยัง Fossil
+            UpdateColor(); // เพิ่มการอัพเดทสีทันทีเมื่อเจอ Fossil
         }
     }
 
@@ -104,8 +165,18 @@ public class SoilBlock : MonoBehaviour
         }
     }
 
+    // Modify UpdateColor method to use InitializeRenderer
     void UpdateColor()
     {
+        InitializeRenderer(); // Add this line
+        
+        // ตรวจสอบว่า rend ไม่เป็น null ก่อนใช้งาน
+        if (rend == null)
+        {
+            Debug.LogError($"Failed to initialize Renderer on {gameObject.name}", this);
+            return;
+        }
+
         switch (soilType)
         {
             case SoilType.Normal:
@@ -125,6 +196,13 @@ public class SoilBlock : MonoBehaviour
 
     private void UpdateSoilAppearance()
     {
+        // ตรวจสอบว่า rend ไม่เป็น null ก่อนใช้งาน
+        if (rend == null || rend.material == null)
+        {
+            Debug.LogError($"Renderer or material is null on {gameObject.name}", this);
+            return;
+        }
+
         Color finalColor = baseColor;
 
         // ปรับสีตามความชื้น
@@ -180,5 +258,14 @@ public class SoilBlock : MonoBehaviour
             startY = transform.position.y;
             yield return new WaitForSeconds(0.1f);
         }
+    }
+
+    void OnDestroy()
+    {
+        if (soilType == SoilType.NearFossil && nearbyFossil != null)
+        {
+            nearbyFossil.CheckSurroundingBlocks();
+        }
+        OnDestroyEvent?.Invoke();
     }
 }

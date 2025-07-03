@@ -178,17 +178,50 @@ public class FossilSpawner : MonoBehaviour
 
     private IEnumerator ShakeBlock(Transform blockTransform)
     {
+        // Store reference to the block component
+        var block = blockTransform?.GetComponent<SoilBlock>();
+        if (block == null) yield break;
+
         Vector3 originalPos = blockTransform.position;
         float elapsed = 0f;
         float duration = 0.5f;
         
-        while (elapsed < duration)
+        // Keep track if block is being destroyed
+        bool isDestroyed = false;
+        block.OnDestroyEvent += () => isDestroyed = true;
+        
+        while (elapsed < duration && !isDestroyed)
         {
-            blockTransform.position = originalPos + Random.insideUnitSphere * 0.05f;
+            try
+            {
+                if (blockTransform != null)
+                {
+                    blockTransform.position = originalPos + Random.insideUnitSphere * 0.05f;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            catch (MissingReferenceException)
+            {
+                break;
+            }
+            
             elapsed += Time.deltaTime;
             yield return null;
         }
         
-        blockTransform.position = originalPos;
+        try
+        {
+            if (blockTransform != null && !isDestroyed)
+            {
+                blockTransform.position = originalPos;
+            }
+        }
+        catch (MissingReferenceException)
+        {
+            // Ignore - block was destroyed
+        }
     }
 }

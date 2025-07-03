@@ -4,9 +4,12 @@ using UnityEngine.InputSystem; // 👈 สำหรับ New Input System
 public class DigOnG_InputSystem : MonoBehaviour
 {
     [Header("Digging Settings")]
-    public float range = 0.05f;
-    public float damage = 0.5f;
-    public LayerMask digMask; // เพิ่ม Layer Mask สำหรับเลือกว่าจะขุดชั้นดินอะไรได้บ้าง
+    public float range = 0.05f;      // รัศมีการขุด
+    public float damage = 0.5f;      // ความเสียหาย
+    public LayerMask digMask;        // เลือก layer ที่จะขุดได้
+    
+    [Header("Tool Settings")]
+    public ToolType toolType = ToolType.HammerChisel; // เพิ่มประเภทเครื่องมือ
     
     [Header("Feedback")]
     public bool showDebugGizmos = true;
@@ -14,6 +17,7 @@ public class DigOnG_InputSystem : MonoBehaviour
 
     void Update()
     {
+        // กดปุ่ม G เพื่อขุด
         if (Keyboard.current.gKey.wasPressedThisFrame)
         {
             PerformDig();
@@ -22,41 +26,56 @@ public class DigOnG_InputSystem : MonoBehaviour
 
     void PerformDig()
     {
-        // ใช้ OverlapSphere เพื่อตรวจจับบล็อกในรัศมี
-        Collider[] hitBlocks = Physics.OverlapSphere(transform.position, range, digMask);
-        int blocksAffected = 0;
+        // ตรวจจับบล็อกในรัศมีที่กำหนด
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, range, digMask);
+        int objectsAffected = 0;
 
-        foreach (Collider col in hitBlocks)
+        foreach (Collider col in hitColliders)
         {
-            SoilBlock block = col.GetComponent<SoilBlock>();
-            if (block != null)
+            bool wasAffected = false;
+
+            // เช็ค Fossil ก่อน
+            Fossil fossil = col.GetComponent<Fossil>();
+            if (fossil != null)
             {
-                // เช็คประเภทของบล็อกก่อนทำลาย
-                if (block.soilType == SoilType.Fossil)
+                fossil.TakeDamage(damage, toolType);
+                wasAffected = true;
+                Debug.Log($"Hit Fossil with {toolType}, Damage: {damage}");
+            }
+            else // ถ้าไม่ใช่ Fossil ให้เช็ค SoilBlock
+            {
+                SoilBlock block = col.GetComponent<SoilBlock>();
+                if (block != null)
                 {
-                    Debug.LogWarning("Found fossil! Be careful!");
-                    // ให้ damage น้อยลงถ้าเป็นฟอสซิล
-                    block.TakeDamage(damage * 0.5f);
+                    // ความเสียหายจะแตกต่างกันตามประเภทของบล็อก
+                    if (block.soilType == SoilType.Fossil)
+                    {
+                        Debug.LogWarning("Found fossil! Be careful!");
+                        block.TakeDamage(damage * 0.5f);  // ฟอสซิลเสียหาย 50%
+                    }
+                    else if (block.soilType == SoilType.NearFossil)
+                    {
+                        Debug.Log("Near fossil! Use more precise tools!");
+                        block.TakeDamage(damage * 0.75f); // ใกล้ฟอสซิลเสียหาย 75%
+                    }
+                    else
+                    {
+                        block.TakeDamage(damage);         // บล็อกปกติเสียหาย 100%
+                    }
+                    wasAffected = true;
                 }
-                else if (block.soilType == SoilType.NearFossil)
-                {
-                    Debug.Log("Near fossil! Use more precise tools!");
-                    block.TakeDamage(damage * 0.75f);
-                }
-                else
-                {
-                    block.TakeDamage(damage);
-                }
-                
-                blocksAffected++;
-                Debug.Log($"Hit Block at {col.transform.position}, Type: {block.soilType}");
+            }
+
+            if (wasAffected)
+            {
+                objectsAffected++;
+                Debug.Log($"Hit object at {col.transform.position}");
             }
         }
 
-        if (blocksAffected > 0)
+        if (objectsAffected > 0)
         {
-            // อาจเพิ่มเสียงหรือ particle effect ตรงนี้
-            Debug.Log($"Dug {blocksAffected} blocks");
+            Debug.Log($"Affected {objectsAffected} objects");
         }
     }
 

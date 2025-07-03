@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4620600735960123604}
   - component: {fileID: 5474617063245513375}
   m_Layer: 9
-  m_Name: Cube
+  m_Name: soil
   m_TagString: Block
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -121,6 +121,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db50c5bdaa286c54587a383408a64d81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  density: 1
+  moisture: 0.5
+  baseColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  usePhysics: 1
+  crumbleThreshold: 0.3
+  dirtParticlePrefab: {fileID: 0}
   soilType: 0
   health: 1
   detectionRadius: 0.15

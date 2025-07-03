@@ -144,7 +144,7 @@ Transform:
   m_GameObject: {fileID: 15157348}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.005, y: 0.144, z: 0.284}
+  m_LocalPosition: {x: 1.005, y: 0.376, z: 0.284}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -214,6 +214,59 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1123406933}
   m_SourcePrefab: {fileID: 100100000, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+--- !u!1 &584893809
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 584893811}
+  - component: {fileID: 584893810}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &584893810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584893809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a078fefabd036b4b9f57a825beed7e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  requiredFossilsToComplete: 3
+  progressText: {fileID: 0}
+  gameCompleteUI: {fileID: 0}
+  onGameComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  onFossilCollected:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!4 &584893811
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584893809}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.024000049, y: 0.84, z: 2.7619998}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &591777961
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -578,6 +631,7 @@ MonoBehaviour:
   length: 10
   height: 9
   blockSize: 0.1
+  soilLayerName: Soil
 --- !u!4 &1050153979
 Transform:
   m_ObjectHideFlags: 0
@@ -608,7 +662,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fossilData: {fileID: 11400000, guid: 3b48f59d2d7f03d48999bdb40c92b22c, type: 2}
   spawnPoint: {fileID: 15157349}
-  clearRadius: 0.13
+  clearRadius: 0.1
   dustCloudPrefab: {fileID: 0}
   rockDebrisPrefab: {fileID: 0}
   spawnEffectRadius: 1
@@ -673,7 +727,8 @@ MonoBehaviour:
   damage: 0.5
   digMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 768
+  toolType: 1
   showDebugGizmos: 1
   gizmoColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!1001 &1794458977
@@ -743,3 +798,4 @@ SceneRoots:
   - {fileID: 1037060575}
   - {fileID: 591777961}
   - {fileID: 1050153979}
+  - {fileID: 584893811}

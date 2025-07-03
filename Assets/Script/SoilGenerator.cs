@@ -3,16 +3,28 @@ using System.Collections.Generic;
 
 public class SoilGenerator : MonoBehaviour
 {
+    [Header("Soil Settings")]
     public GameObject soilPrefab;
     public int width = 10;
     public int length = 10;
     public int height = 10;
     public float blockSize = 0.1f;
+    
+    [Header("Layer Settings")]
+    [Tooltip("Layer ที่จะกำหนดให้กับ soil blocks")]
+    public string soilLayerName = "Soil";
 
     private Dictionary<Vector3Int, GameObject> soilBlocks = new Dictionary<Vector3Int, GameObject>();
 
     void Start()
     {
+        // ตรวจสอบว่า layer ที่ต้องการมีอยู่จริง
+        if (LayerMask.NameToLayer(soilLayerName) == -1)
+        {
+            Debug.LogError($"Layer '{soilLayerName}' not found. Please create this layer in Tags and Layers settings.");
+            return;
+        }
+
         GenerateSoil();
     }
 
@@ -32,6 +44,9 @@ public class SoilGenerator : MonoBehaviour
 
                     GameObject block = Instantiate(soilPrefab, transform.position + position, 
                         Quaternion.identity, this.transform);
+                    
+                    // กำหนด layer ให้กับ block
+                    block.layer = LayerMask.NameToLayer(soilLayerName);
                     
                     // เก็บบล็อกลงใน Dictionary โดยใช้พิกัดเป็น key
                     Vector3Int gridPos = new Vector3Int(x, y, z);
