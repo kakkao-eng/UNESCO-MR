@@ -218,6 +218,7 @@ PrefabInstance:
       insertIndex: -1
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       addedObject: {fileID: 480649688}
   m_SourcePrefab: {fileID: 100100000, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
 --- !u!1 &247018015
@@ -648,6 +649,10 @@ MonoBehaviour:
   m_MiningInputAction: {fileID: 0}
   m_MiningEffects: {fileID: 0}
   m_MiningAudioSource: {fileID: 0}
+=======
+      addedObject: {fileID: 1123406933}
+  m_SourcePrefab: {fileID: 100100000, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+>>>>>>> Stashed changes
 =======
       addedObject: {fileID: 1123406933}
   m_SourcePrefab: {fileID: 100100000, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
@@ -1096,9 +1101,12 @@ MonoBehaviour:
   m_DestroyOnRemoval: 1
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!43 &1367746222
 Mesh:
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 --- !u!1 &1123406927 stripped
@@ -1113,6 +1121,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
   m_Name: pb_Mesh-113168(Clone)(Clone)(Clone)(Clone)
@@ -1277,6 +1286,8 @@ MonoBehaviour:
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
   m_GameObject: {fileID: 1123406927}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -1291,6 +1302,9 @@ MonoBehaviour:
   showDebugGizmos: 1
   gizmoColor: {r: 0, g: 1, b: 0, a: 1}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -1353,6 +1367,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!1 &1985889021
 GameObject:
   m_ObjectHideFlags: 0
@@ -1408,6 +1423,8 @@ Transform:
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1419,8 +1436,12 @@ SceneRoots:
   - {fileID: 591777961}
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   - {fileID: 1985889023}
   - {fileID: 247018021}
+=======
+  - {fileID: 1050153979}
+>>>>>>> Stashed changes
 =======
   - {fileID: 1050153979}
 >>>>>>> Stashed changes
