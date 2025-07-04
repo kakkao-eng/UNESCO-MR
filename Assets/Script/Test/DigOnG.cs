@@ -22,6 +22,12 @@ public class DigOnG_InputSystem : MonoBehaviour
         {
             PerformDig();
         }
+
+        // กด H เพื่อลบดินสีเหลืองรอบ Fossil ทั้งหมด
+        if (Keyboard.current.hKey.wasPressedThisFrame)
+        {
+            ClearAllYellowSoil();
+        }
     }
 
     void PerformDig()
@@ -77,6 +83,36 @@ public class DigOnG_InputSystem : MonoBehaviour
         {
             Debug.Log($"Affected {objectsAffected} objects");
         }
+    }
+
+    void ClearAllYellowSoil()
+    {
+        int count = 0;
+        var allSoilBlocks = FindObjectsOfType<SoilBlock>();
+        foreach (var block in allSoilBlocks)
+        {
+            if (block.soilType == SoilType.NearFossil)
+            {
+                Destroy(block.gameObject);
+                count++;
+            }
+        }
+        Debug.Log($"Clear yellow soil complete: {count} blocks destroyed");
+
+        // เช็คจบเกม
+        CheckYellowSoilAndEndGame();
+    }
+
+    void CheckYellowSoilAndEndGame()
+    {
+        var yellowSoils = GameObject.FindObjectsOfType<SoilBlock>();
+        foreach (var soil in yellowSoils)
+        {
+            if (soil.soilType == SoilType.NearFossil)
+                return; // ยังมีดินเหลืองอยู่ ไม่จบเกม
+        }
+        // ไม่เหลือดินเหลืองแล้ว
+        GameManager.Instance.CompleteGame();
     }
 
     void OnDrawGizmosSelected()

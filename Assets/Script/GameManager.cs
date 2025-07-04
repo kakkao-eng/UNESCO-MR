@@ -99,6 +99,8 @@ public class GameManager : MonoBehaviour
     // Change the access modifier of CompleteGame() from private to public
     public void CompleteGame()
     {
+        Debug.Log("Game Ended");
+        // ... โค้ดจบเกมเดิม
         if (isGameComplete) return;
 
         isGameComplete = true;

@@ -267,5 +267,20 @@ public class SoilBlock : MonoBehaviour
             nearbyFossil.CheckSurroundingBlocks();
         }
         OnDestroyEvent?.Invoke();
+
+        // เพิ่มบรรทัดนี้
+        CheckYellowSoilAndEndGame();
+    }
+
+    // เพิ่มฟังก์ชันนี้ในคลาส SoilBlock (หรือจะสร้าง Utility class ก็ได้)
+    private void CheckYellowSoilAndEndGame()
+    {
+        var yellowSoils = GameObject.FindObjectsOfType<SoilBlock>();
+        foreach (var soil in yellowSoils)
+        {
+            if (soil.soilType == SoilType.NearFossil)
+                return;
+        }
+        GameManager.Instance.CompleteGame();
     }
 }
