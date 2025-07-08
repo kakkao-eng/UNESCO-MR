@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ToolboxUIController : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class ToolboxUIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T)) // กด T เพื่อเปิด/ปิด Toolbox
+        if (Keyboard.current != null && Keyboard.current.tKey.wasPressedThisFrame) // กด T เพื่อเปิด/ปิด Toolbox
             ToggleToolbox();
     }
 
