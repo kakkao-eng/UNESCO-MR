@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem; // 👈 สำหรับ New Input System
+using ToolNamespace;
 
 public class DigOnG_InputSystem : MonoBehaviour
 {
@@ -9,8 +10,8 @@ public class DigOnG_InputSystem : MonoBehaviour
     public LayerMask digMask;        // เลือก layer ที่จะขุดได้
     
     [Header("Tool Settings")]
-    public ToolType toolType = ToolType.HammerChisel; // เพิ่มประเภทเครื่องมือ
-    
+    public ToolType toolType = ToolType.Chisel;
+
     [Header("Feedback")]
     public bool showDebugGizmos = true;
     public Color gizmoColor = Color.green;

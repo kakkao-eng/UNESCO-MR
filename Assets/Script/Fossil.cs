@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using ToolNamespace; // ใช้ ToolType จาก ToolData.cs
 
 public class Fossil : MonoBehaviour
 {
@@ -93,12 +94,15 @@ public class Fossil : MonoBehaviour
         // คำนวณความเสียหายตามประเภทของเครื่องมือ
         switch (toolType)
         {
-            case ToolType.Drill:
-                return damage * 2f; // สว่านทำความเสียหายมาก
-            case ToolType.HammerChisel:
-                return damage * 1.5f; // ค้อนและสิ่วทำความเสียหายปานกลาง
+            case ToolType.ElectricDrill:
+                return damage * 2f; // สว่านไฟฟ้าทำความเสียหายมาก
+            case ToolType.Hammer:
+            case ToolType.Chisel:
+                return damage * 1.5f; // ค้อนหรือสิ่วทำความเสียหายปานกลาง
             case ToolType.Brush:
                 return 0f; // แปรงไม่ทำความเสียหาย
+            case ToolType.Glue:
+                return 0f; // กาวไม่ทำความเสียหาย
             default:
                 return damage;
         }
@@ -280,13 +284,4 @@ public class Fossil : MonoBehaviour
     public FossilState GetCurrentState() => currentState;
     public float GetDurability() => currentDurability;
     public int GetFossilId() => fossilId;
-}
-
-// ประเภทของเครื่องมือ
-public enum ToolType
-{
-    Drill,
-    HammerChisel,
-    Brush,
-    Glue
 }

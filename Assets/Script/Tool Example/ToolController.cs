@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using ToolNamespace;
 
 // ผลลัพธ์การใช้เครื่องมือ
 public enum ToolActionResult
@@ -18,10 +19,12 @@ public class ToolController : MonoBehaviour
     public bool HasChisel { get; set; }   // มีสิ่วหรือไม่
     public bool HasHammer { get; set; }   // มีค้อนหรือไม่
 
-
     // 1. สิ่ว: ใช้ได้เฉพาะเมื่อมีค้อน และใช้กับดินที่ไม่ใช่ฟอสซิลเท่านั้น
     public ToolActionResult UseChisel(SoilBlock target)
     {
+        if (target == null)
+            return ToolActionResult.Fail;
+
         if (!HasHammer)
             return ToolActionResult.NeedHammer;
         if (target.soilType == SoilType.Fossil || target.soilType == SoilType.Damaged)
@@ -43,6 +46,9 @@ public class ToolController : MonoBehaviour
     // 3. แปรง: ทำความสะอาดดินใกล้ฟอสซิล ไม่ทำให้ฟอสซิลเสียหาย
     public ToolActionResult UseBrush(SoilBlock target)
     {
+        if (target == null)
+            return ToolActionResult.Fail;
+
         if (target.soilType == SoilType.NearFossil || target.soilType == SoilType.Fossil)
         {
             target.Brush();
@@ -54,6 +60,9 @@ public class ToolController : MonoBehaviour
     // 4. สว่านไฟฟ้า: ปลอดภัยสำหรับดินใกล้ฟอสซิล เศษดินน้อยกว่า แม่นยำกว่า
     public ToolActionResult UseDrill(SoilBlock target)
     {
+        if (target == null)
+            return ToolActionResult.Fail;
+
         if (target.soilType == SoilType.NearFossil || target.soilType == SoilType.Normal)
         {
             target.TakeDamage(0.3f); // ความเสียหายน้อยกว่า เศษดินน้อยกว่า
@@ -66,6 +75,9 @@ public class ToolController : MonoBehaviour
     // 5. กาว: ซ่อมแซมฟอสซิลที่เสียหาย
     public ToolActionResult UseGlue(Fossil target)
     {
+        if (target == null)
+            return ToolActionResult.Fail;
+
         if (target.GetCurrentState() == Fossil.FossilState.Damaged)
         {
             target.Repair();

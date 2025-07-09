@@ -5,11 +5,11 @@ namespace ToolNamespace
     // ประเภทของเครื่องมือ
     public enum ToolType
     {
-        Chisel,         // สิ่ว
-        Hammer,         // ค้อน
-        Brush,          // แปรง
-        ElectricDrill,  // สว่านไฟฟ้า
-        Glue            // กาว
+        Chisel,
+        Hammer,
+        Brush,
+        ElectricDrill,
+        Glue
     }
 
     // ข้อมูล ScriptableObject สำหรับเครื่องมือแต่ละชนิด
