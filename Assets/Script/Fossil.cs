@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-using ToolNamespace; // ใช้ ToolType จาก ToolData.cs
+using Script.Tool_Example;
+
+// ใช้ ToolType จาก ToolData.cs
 
 public class Fossil : MonoBehaviour
 {

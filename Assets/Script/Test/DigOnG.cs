@@ -1,6 +1,7 @@
+using Script.Tool_Example;
 using UnityEngine;
 using UnityEngine.InputSystem; // 👈 สำหรับ New Input System
-using ToolNamespace;
+
 
 public class DigOnG_InputSystem : MonoBehaviour
 {
