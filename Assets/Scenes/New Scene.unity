@@ -549,13 +549,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxDrillDistance: 2
-  drillDamage: 30
+  drillDamage: 0.1
+  drillRadius: 0.2
   drillInterval: 0.1
   soilGenerator: {fileID: 0}
-  drillTip: {fileID: 283119238}
+  drillTip: {fileID: 0}
   drillParticles: {fileID: 0}
+  soilLayerMask:
+    serializedVersion: 2
+    m_Bits: 768
+  fossilLayerMask:
+    serializedVersion: 2
+    m_Bits: 768
   showDrillRange: 1
-  gizmoColor: {r: 1, g: 0, b: 0, a: 1}
+  drillRangeColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!65 &283119235
 BoxCollider:
   m_ObjectHideFlags: 0

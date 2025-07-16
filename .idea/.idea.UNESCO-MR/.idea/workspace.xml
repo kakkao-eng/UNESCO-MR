@@ -6,27 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="3412de0d-7c74-462a-9563-93646cdbe3d7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.UNESCO-MR/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UNESCO-MR/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Tool/ChiselTool.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Tool/ChiselTool.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Tool/HammerChisel.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Tool/HammerChisel.prefab.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/New Scene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/New Scene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Fossil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Fossil.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/PlayerToolManager.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/PlayerToolManager.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Test/DigOnG.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Test/DigOnG.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Tool Example/ChiselTool.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Tool Example/ChiselTool.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Tool Example/HammerChisel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Tool Example/HammerChisel.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Tool Example/ToolController.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Tool Example/ToolController.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Tool Example/ToolData.asset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Tool Example/ToolData.asset.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Tool Example/ToolData.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Tool Example/ToolData.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Tool Example/ToolPickupHandler.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Tool Example/ToolPickupHandler.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/Tool Example/DrillTool.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Tool Example/DrillTool.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,11 +27,11 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///AIAssistantSnippet.." root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Script/Test/DigOnG.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Script/Tool Example/DrillTool.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Script/Tool Example/DrillVisuals.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Script/Tool Example/ToolType.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.xr.interaction.toolkit/Runtime/Inputs/Haptics/HapticImpulseCommandChannelGroup.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
@@ -142,6 +123,7 @@
       <workItem from="1751436955706" duration="2310000" />
       <workItem from="1752482098320" duration="1450000" />
       <workItem from="1752543781612" duration="10178000" />
+      <workItem from="1752634157958" duration="6677000" />
     </task>
     <servers />
   </component>

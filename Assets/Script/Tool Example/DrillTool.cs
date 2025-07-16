@@ -1,25 +1,32 @@
+using Script.Tool_Example;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class DrillTool : MonoBehaviour
 {
     [Header("Drill Settings")]
-    public float maxDrillDistance = 2f;    // ระยะสูงสุดที่สว่านเจาะได้
-    public float drillDamage = 0.1f;       // ความเสียหายต่อการเจาะ 1 ครั้ง
-    public float drillInterval = 0.1f;      // ระยะเวลาระหว่างการเจาะแต่ละครั้ง
+    public float maxDrillDistance = 2f;    
+    public float drillDamage = 20f;       // เพิ่มค่าความเสียหาย
+    public float drillRadius = 0.2f;      // รัศมีการขุด
+    public float drillInterval = 0.1f;    // ความถี่ในการขุด
     
     [Header("References")]
     public SoilGenerator soilGenerator;
-    public Transform drillTip;              // จุดปลายสว่าน
-    public ParticleSystem drillParticles;   // เอฟเฟคการเจาะ (ถ้ามี)
+    public Transform drillTip;              
+    public ParticleSystem drillParticles;   
     
-    [Header("Visual Feedback")]
+    [Header("Layer Settings")]
+    public LayerMask soilLayerMask;     // Layer ของดิน
+    public LayerMask fossilLayerMask;   // Layer ของฟอสซิล
+    
+    [Header("Debug Visualization")]
     public bool showDrillRange = true;
-    public Color gizmoColor = Color.red;
+    public Color drillRangeColor = Color.red;
     
     private float nextDrillTime;
     private bool isDrilling;
-    
+    private bool isEquipped = false;
+
     private void Start()
     {
         if (soilGenerator == null)
@@ -30,26 +37,42 @@ public class DrillTool : MonoBehaviour
             
         if (drillParticles != null)
             drillParticles.Stop();
+
+        // กำหนด Layer Masks
+        soilLayerMask = 1 << LayerMask.NameToLayer("Soil");
+        fossilLayerMask = 1 << LayerMask.NameToLayer("Fossil");
     }
 
     private void Update()
     {
-        // เริ่มเจาะเมื่อกด G
-        if (Keyboard.current.gKey.wasPressedThisFrame)
+        if (Keyboard.current != null && Keyboard.current.gKey.wasPressedThisFrame)
         {
-            StartDrilling();
+            isEquipped = !isEquipped;
+            Debug.Log($"Drill {(isEquipped ? "Equipped" : "Unequipped")}");
         }
-        // หยุดเจาะเมื่อปล่อย G
-        else if (Keyboard.current.gKey.wasReleasedThisFrame)
+
+        if (!isEquipped)
+        {
+            if (isDrilling) StopDrilling();
+            return;
+        }
+
+        if (Mouse.current != null && Mouse.current.leftButton.isPressed)
+        {
+            if (!isDrilling)
+            {
+                StartDrilling();
+            }
+            
+            if (Time.time >= nextDrillTime)
+            {
+                PerformDrill();
+                nextDrillTime = Time.time + drillInterval;
+            }
+        }
+        else if (isDrilling)
         {
             StopDrilling();
-        }
-        
-        // ทำการเจาะต่อเนื่องถ้ากำลังเจาะอยู่
-        if (isDrilling && Time.time >= nextDrillTime)
-        {
-            PerformDrill();
-            nextDrillTime = Time.time + drillInterval;
         }
     }
 
@@ -71,22 +94,37 @@ public class DrillTool : MonoBehaviour
     {
         if (soilGenerator == null) return;
 
-        // ยิง Raycast จากปลายสว่าน
         RaycastHit hit;
-        if (Physics.Raycast(drillTip.position, drillTip.forward, out hit, maxDrillDistance))
+        if (Physics.Raycast(drillTip.position, drillTip.forward, out hit, maxDrillDistance, soilLayerMask | fossilLayerMask))
         {
-            // เช็คว่าชนกับบล็อกดินหรือไม่
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer(soilGenerator.soilLayerName))
+            // ตรวจสอบว่าชนกับอะไร
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Soil"))
             {
-                // เจาะเฉพาะบล็อกที่ชน
-                soilGenerator.ClearBlocksInArea(hit.point, soilGenerator.blockSize * 0.5f);
-                
-                // ปรับตำแหน่งเอฟเฟคไปที่จุดที่เจาะ
-                if (drillParticles != null)
+                // ถ้าเป็นดิน
+                SoilBlock soilBlock = hit.collider.GetComponent<SoilBlock>();
+                if (soilBlock != null)
                 {
-                    drillParticles.transform.position = hit.point;
-                    drillParticles.transform.forward = hit.normal;
+                    soilBlock.TakeDamage(drillDamage);
                 }
+                
+                // ลบบล็อกดินในรัศมี
+                soilGenerator.ClearBlocksInArea(hit.point, drillRadius);
+            }
+            else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Fossil"))
+            {
+                // ถ้าเป็นฟอสซิล
+                Fossil fossil = hit.collider.GetComponent<Fossil>();
+                if (fossil != null)
+                {
+                    fossil.TakeDamage(drillDamage, ToolType.ElectricDrill);
+                }
+            }
+
+            // แสดง particle effect ที่จุดชน
+            if (drillParticles != null)
+            {
+                drillParticles.transform.position = hit.point;
+                drillParticles.transform.forward = hit.normal;
             }
         }
     }
@@ -95,7 +133,29 @@ public class DrillTool : MonoBehaviour
     {
         if (!showDrillRange || drillTip == null) return;
         
-        Gizmos.color = gizmoColor;
+        Gizmos.color = drillRangeColor;
         Gizmos.DrawLine(drillTip.position, drillTip.position + drillTip.forward * maxDrillDistance);
+        
+        // วาดรัศมีการขุด
+        Matrix4x4 originalMatrix = Gizmos.matrix;
+        Vector3 endPoint = drillTip.position + drillTip.forward * maxDrillDistance;
+        Quaternion rotation = Quaternion.LookRotation(drillTip.forward);
+        Gizmos.matrix = Matrix4x4.TRS(endPoint, rotation, Vector3.one);
+        DrawGizmosCircle(Vector3.zero, drillRadius, 32);
+        Gizmos.matrix = originalMatrix;
+    }
+
+    private void DrawGizmosCircle(Vector3 center, float radius, int segments)
+    {
+        float angleStep = 360f / segments;
+        Vector3 previousPoint = center + Vector3.right * radius;
+
+        for (int i = 0; i <= segments; i++)
+        {
+            float angle = i * angleStep * Mathf.Deg2Rad;
+            Vector3 newPoint = center + new Vector3(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius, 0);
+            Gizmos.DrawLine(previousPoint, newPoint);
+            previousPoint = newPoint;
+        }
     }
 }
