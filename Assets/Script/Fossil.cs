@@ -129,19 +129,6 @@ public class Fossil : MonoBehaviour
         }
     }
 
-    public void Collect()
-    {
-        if (currentState == FossilState.Cleaned || currentState == FossilState.Repaired)
-        {
-            SetState(FossilState.Collected);
-            
-            // แจ้ง GameManager ว่าเก็บฟอสซิลได้
-            GameManager.Instance.CollectFossil();
-            
-            gameObject.SetActive(false);
-        }
-    }
-
     private void SetState(FossilState newState)
     {
         currentState = newState;
@@ -257,7 +244,7 @@ public class Fossil : MonoBehaviour
         float previousY = startY;
         float stationaryTime = 0f;
 
-        while (stationaryTime < 0.5f) // รอให้หยุดนิ่ง 0.5 วินาที
+        while (stationaryTime < 0.5f)
         {
             float currentY = transform.position.y;
             if (Mathf.Abs(currentY - previousY) < 0.01f)
@@ -278,7 +265,7 @@ public class Fossil : MonoBehaviour
             Destroy(rb);
         }
 
-        // จบเกม
+        // จบเกมทันทีเมื่อฟอสซิลตกลงมาและหยุดนิ่ง
         GameManager.Instance.CompleteGame();
     }
 

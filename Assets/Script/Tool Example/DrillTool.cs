@@ -6,9 +6,9 @@ public class DrillTool : MonoBehaviour
 {
     [Header("Drill Settings")]
     public float maxDrillDistance = 2f;    
-    public float drillDamage = 20f;       // เพิ่มค่าความเสียหาย
-    public float drillRadius = 0.2f;      // รัศมีการขุด
-    public float drillInterval = 0.1f;    // ความถี่ในการขุด
+    public float drillDamage = 20f;       
+    public float drillRadius = 0.2f;      
+    public float drillInterval = 0.1f;    
     
     [Header("References")]
     public SoilGenerator soilGenerator;
@@ -16,8 +16,8 @@ public class DrillTool : MonoBehaviour
     public ParticleSystem drillParticles;   
     
     [Header("Layer Settings")]
-    public LayerMask soilLayerMask;     // Layer ของดิน
-    public LayerMask fossilLayerMask;   // Layer ของฟอสซิล
+    public LayerMask soilLayerMask;     
+    public LayerMask fossilLayerMask;   
     
     [Header("Debug Visualization")]
     public bool showDrillRange = true;
@@ -25,7 +25,6 @@ public class DrillTool : MonoBehaviour
     
     private float nextDrillTime;
     private bool isDrilling;
-    private bool isEquipped = false;
 
     private void Start()
     {
@@ -38,25 +37,12 @@ public class DrillTool : MonoBehaviour
         if (drillParticles != null)
             drillParticles.Stop();
 
-        // กำหนด Layer Masks
         soilLayerMask = 1 << LayerMask.NameToLayer("Soil");
         fossilLayerMask = 1 << LayerMask.NameToLayer("Fossil");
     }
 
     private void Update()
     {
-        if (Keyboard.current != null && Keyboard.current.gKey.wasPressedThisFrame)
-        {
-            isEquipped = !isEquipped;
-            Debug.Log($"Drill {(isEquipped ? "Equipped" : "Unequipped")}");
-        }
-
-        if (!isEquipped)
-        {
-            if (isDrilling) StopDrilling();
-            return;
-        }
-
         if (Mouse.current != null && Mouse.current.leftButton.isPressed)
         {
             if (!isDrilling)

@@ -4,21 +4,19 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("Game Settings")]
-    [SerializeField] 
-    private int requiredFossilsToComplete = 3; // จำนวนฟอสซิลที่ต้องเก็บเพื่อจบเกม
+    // ลบ requiredFossilsToComplete เพราะไม่จำเป็นต้องใช้แล้ว
     
     [SerializeField]
-    private TextMeshProUGUI progressText; // แสดงความคืบหน้า
+    private TextMeshProUGUI progressText; // อาจเปลี่ยนเป็นแสดงข้อความอื่นแทน
     
     [SerializeField]
-    private GameObject gameCompleteUI; // UI แสดงเมื่อจบเกม
+    private GameObject gameCompleteUI;
 
     [Header("Events")]
-    public UnityEvent onGameComplete; // Event เมื่อจบเกม
-    public UnityEvent<int> onFossilCollected; // Event เมื่อเก็บฟอสซิล
-
-    private int fossilsCollected = 0;
+    public UnityEvent onGameComplete;
+    
+    // ลบ onFossilCollected เพราะไม่ต้องนับจำนวนฟอสซิลแล้ว
+    
     private bool isGameComplete = false;
 
     private static GameManager _instance;
@@ -61,46 +59,21 @@ public class GameManager : MonoBehaviour
 
     public void InitializeGame()
     {
-        fossilsCollected = 0;
         isGameComplete = false;
         if (gameCompleteUI != null)
             gameCompleteUI.SetActive(false);
-    }
-
-    // เรียกเมื่อเก็บฟอสซิลได้
-    public void CollectFossil()
-    {
-        if (isGameComplete) return;
-
-        fossilsCollected++;
-        onFossilCollected?.Invoke(fossilsCollected);
-        
-        UpdateUI();
-        CheckGameComplete();
     }
 
     private void UpdateUI()
     {
         if (progressText != null)
         {
-            progressText.text = $"ฟอสซิลที่เก็บได้: {fossilsCollected}/{requiredFossilsToComplete}";
+            progressText.text = "ขุดดินรอบๆ ฟอสซิลให้หมดเพื่อทำให้ฟอสซิลตกลงมา";
         }
     }
 
-    private void CheckGameComplete()
-    {
-        if (fossilsCollected >= requiredFossilsToComplete && !isGameComplete)
-        {
-            isGameComplete = true;
-            CompleteGame();
-        }
-    }
-
-    // Change the access modifier of CompleteGame() from private to public
     public void CompleteGame()
     {
-        Debug.Log("Game Ended");
-        // ... โค้ดจบเกมเดิม
         if (isGameComplete) return;
 
         isGameComplete = true;
@@ -112,6 +85,4 @@ public class GameManager : MonoBehaviour
 
     // สำหรับเช็คสถานะเกม
     public bool IsGameComplete() => isGameComplete;
-    public int GetCollectedFossils() => fossilsCollected;
-    public int GetRequiredFossils() => requiredFossilsToComplete;
 }
