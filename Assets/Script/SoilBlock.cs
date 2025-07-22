@@ -159,8 +159,18 @@ public class SoilBlock : MonoBehaviour
 
     public void Brush()
     {
-        if (soilType == SoilType.NearFossil || soilType == SoilType.Fossil)
+        if (soilType == SoilType.NearFossil)
         {
+            // สร้าง particle effect ฝุ่น
+            if (dirtParticlePrefab != null)
+            {
+                GameObject particles = Instantiate(dirtParticlePrefab, transform.position, Quaternion.identity);
+                var mainModule = particles.GetComponent<ParticleSystem>().main;
+                mainModule.startColor = rend.material.color;
+                Destroy(particles, 2f);
+            }
+
+            // ทำลายบล็อกดิน
             Destroy(gameObject);
         }
     }

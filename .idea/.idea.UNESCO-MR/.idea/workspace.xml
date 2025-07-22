@@ -6,12 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="3412de0d-7c74-462a-9563-93646cdbe3d7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.UNESCO-MR/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.UNESCO-MR/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/New Scene.unity" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/New Scene.unity.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Fossil.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Fossil.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/GameManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Tool Example/DrillTool.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Tool Example/DrillTool.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/URPProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/URPProjectSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Game.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Game.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/SoilBlock.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/SoilBlock.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +28,7 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Assets/Script/Test/DigOnG.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Script/Tool Example/Brush.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Script/Tool Example/ChiselAndHammerTool.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Script/Tool Example/DrillTool.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Script/Tool Example/DrillVisuals.cs" root0="FORCE_HIGHLIGHTING" />
@@ -130,6 +127,7 @@
       <workItem from="1752543781612" duration="10178000" />
       <workItem from="1752634157958" duration="6677000" />
       <workItem from="1752804765452" duration="6164000" />
+      <workItem from="1753152254488" duration="3745000" />
     </task>
     <servers />
   </component>
