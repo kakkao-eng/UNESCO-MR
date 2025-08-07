@@ -2076,7 +2076,7 @@ MonoBehaviour:
   soilPrefab: {fileID: 2955123074680556241, guid: a8a5a6968d4a68b48ba9dfe61707c2e3, type: 3}
   width: 20
   length: 10
-  height: 9
+  height: 4
   blockSize: 0.1
   soilLayerName: Soil
 --- !u!4 &1050153979

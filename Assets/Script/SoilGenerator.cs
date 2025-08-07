@@ -34,7 +34,9 @@ public class SoilGenerator : MonoBehaviour
         {
             for (int z = 0; z < length; z++)
             {
-                for (int y = 0; y < height; y++)
+                // สุ่มความสูงของดินในตำแหน่งนี้
+                int randomHeight = Random.Range(1, height + 1); // อย่างน้อย 1 ชั้น สูงสุดเท่าที่กำหนด
+                for (int y = 0; y < randomHeight; y++)
                 {
                     Vector3 position = new Vector3(
                         x * blockSize,
@@ -42,12 +44,12 @@ public class SoilGenerator : MonoBehaviour
                         z * blockSize
                     );
 
-                    GameObject block = Instantiate(soilPrefab, transform.position + position, 
+                    GameObject block = Instantiate(soilPrefab, transform.position + position,
                         Quaternion.identity, this.transform);
-                    
+
                     // กำหนด layer ให้กับ block
                     block.layer = LayerMask.NameToLayer(soilLayerName);
-                    
+
                     // เก็บบล็อกลงใน Dictionary โดยใช้พิกัดเป็น key
                     Vector3Int gridPos = new Vector3Int(x, y, z);
                     soilBlocks[gridPos] = block;
