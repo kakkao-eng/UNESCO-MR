@@ -301,7 +301,7 @@ GameObject:
   - component: {fileID: 201129687}
   - component: {fileID: 201129686}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: BPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1149,6 +1149,7 @@ GameObject:
   - component: {fileID: 584893811}
   - component: {fileID: 584893810}
   - component: {fileID: 584893812}
+  - component: {fileID: 584893813}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1195,12 +1196,31 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 584893809}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af765641884a41048ba668105f065628, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   toolboxPanel: {fileID: 201129684}
+--- !u!114 &584893813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584893809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91a5eb720d72b784d8d51d93f86857a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toolBoxObject: {fileID: 1187816055}
+  toolPanel: {fileID: 201129684}
+  startButton: {fileID: 407411183}
+  timerText: {fileID: 1295429368}
+  stars:
+  - {fileID: 407411184}
+  gameTime: 120
 --- !u!1001 &591777961
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2201,7 +2221,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1143141168
 RectTransform:
   m_ObjectHideFlags: 0

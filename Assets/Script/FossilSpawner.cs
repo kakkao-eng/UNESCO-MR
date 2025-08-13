@@ -44,7 +44,7 @@ public class FossilSpawner : MonoBehaviour
         // Spawn fossil
         GameObject fossil = Instantiate(prefab, spawnPoint.position, randomRotation);
         fossil.name = "Fossil_" + fossilName;
-        
+
         // กำหนด layer เป็น "Fossil"
         fossil.layer = LayerMask.NameToLayer("Fossil");
 
@@ -55,7 +55,7 @@ public class FossilSpawner : MonoBehaviour
         if (soilGenerator != null)
         {
             soilGenerator.ClearBlocksInArea(fossil.transform.position, clearRadius);
-            
+
             // เพิ่ม: บังคับให้บล็อกทั้งหมดเช็คการทับซ้อนใหม่
             var allBlocks = FindObjectsOfType<SoilBlock>();
             foreach (var block in allBlocks)
@@ -72,7 +72,7 @@ public class FossilSpawner : MonoBehaviour
         // เรียกใช้เอฟเฟกต์การ spawn
         SpawnWithEffects(fossil);
     }
-    
+
     bool ValidateFossilData()
     {
         if (fossilData == null || fossilData.fossilPrefabs.Length == 0)
@@ -82,7 +82,7 @@ public class FossilSpawner : MonoBehaviour
         }
         return true;
     }
-    
+
     void ClearBlocksAround(Vector3 center, float radius)
     {
         // Use OverlapSphere instead of OverlapColliderNonAlloc
@@ -115,11 +115,11 @@ public class FossilSpawner : MonoBehaviour
             // แสดงรัศมีการ clear blocks
             Gizmos.color = new Color(1f, 0f, 0f, 0.3f); // สีแดงโปร่งแสง
             Gizmos.DrawSphere(spawnPoint.position, clearRadius);
-            
+
             // แสดงขอบเขตการ spawn
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(spawnPoint.position, clearRadius);
-            
+
             // แสดง Collider
             Collider fossilCollider = GetComponent<Collider>();
             if (fossilCollider != null)
@@ -185,11 +185,11 @@ public class FossilSpawner : MonoBehaviour
         Vector3 originalPos = blockTransform.position;
         float elapsed = 0f;
         float duration = 0.5f;
-        
+
         // Keep track if block is being destroyed
         bool isDestroyed = false;
         block.OnDestroyEvent += () => isDestroyed = true;
-        
+
         while (elapsed < duration && !isDestroyed)
         {
             try
@@ -207,11 +207,11 @@ public class FossilSpawner : MonoBehaviour
             {
                 break;
             }
-            
+
             elapsed += Time.deltaTime;
             yield return null;
         }
-        
+
         try
         {
             if (blockTransform != null && !isDestroyed)
@@ -223,5 +223,9 @@ public class FossilSpawner : MonoBehaviour
         {
             // Ignore - block was destroyed
         }
+    }
+    public void Spawn()
+    {
+        SpawnRandomFossil();
     }
 }
