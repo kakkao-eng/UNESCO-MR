@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Game UI")]
     public Button startButton;       // ปุ่มเริ่มเกม (UI)
+    public Image BgTimeText;
     public TMP_Text timerText;       // ข้อความเวลา (TMP)
     public Image[] stars;            // ไอคอนดาวแสดงคะแนน
 
@@ -63,7 +64,7 @@ public class UIManager : MonoBehaviour
         {
             fossilSpawner.Spawn();
         }
-
+        BgTimeText.gameObject.SetActive(true);
         startButton.gameObject.SetActive(false); // ซ่อนปุ่ม Start
     }
 

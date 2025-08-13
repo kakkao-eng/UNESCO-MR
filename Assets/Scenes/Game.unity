@@ -1217,6 +1217,7 @@ MonoBehaviour:
   toolBoxObject: {fileID: 1187816055}
   toolPanel: {fileID: 201129684}
   startButton: {fileID: 407411183}
+  BgTimeText: {fileID: 1143141169}
   timerText: {fileID: 1295429368}
   stars:
   - {fileID: 407411184}
