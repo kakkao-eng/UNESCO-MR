@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     public GameObject toolPanel;     // UI Panel ที่มีปุ่ม Start + วิธีใช้เครื่องมือ
 
     [Header("Game UI")]
+    public GameObject GameOver;   //หน้าตอนแพ้ (เวลาหมด)
     public Button startButton;       // ปุ่มเริ่มเกม (UI)
     public Image BgTimeText;
     public TMP_Text timerText;       // ข้อความเวลา (TMP)
@@ -37,6 +38,8 @@ public class UIManager : MonoBehaviour
 
         // ผูก Event ปุ่ม Start
         startButton.onClick.AddListener(StartGame);
+
+        GameOver.SetActive(false);
     }
 
     /// <summary>
@@ -65,6 +68,7 @@ public class UIManager : MonoBehaviour
             fossilSpawner.Spawn();
         }
         BgTimeText.gameObject.SetActive(true);
+        toolPanel.SetActive(false);
         startButton.gameObject.SetActive(false); // ซ่อนปุ่ม Start
     }
 
@@ -133,6 +137,7 @@ public class UIManager : MonoBehaviour
     void MissionFail()
     {
         gameRunning = false;
+        GameOver.SetActive(true);
         Debug.Log("Mission Fail!");
     }
 
