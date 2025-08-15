@@ -9,7 +9,7 @@ public class SoilGenerator : MonoBehaviour
     public int length = 10;
     public int height = 10;
     public float blockSize = 0.1f;
-    
+
     [Header("Layer Settings")]
     [Tooltip("Layer ที่จะกำหนดให้กับ soil blocks")]
     public string soilLayerName = "Soil";
@@ -25,11 +25,17 @@ public class SoilGenerator : MonoBehaviour
             return;
         }
 
-        GenerateSoil();
     }
 
     void GenerateSoil()
     {
+        // เคลียร์ของเก่าก่อน (เผื่อมีการสร้างใหม่)
+        foreach (var block in soilBlocks.Values)
+        {
+            if (block != null) Destroy(block);
+        }
+        soilBlocks.Clear();
+
         for (int x = 0; x < width; x++)
         {
             for (int z = 0; z < length; z++)
@@ -111,6 +117,11 @@ public class SoilGenerator : MonoBehaviour
     {
         Vector3 size = new Vector3(width * blockSize, height * blockSize, length * blockSize);
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(transform.position + size/2, size);
+        Gizmos.DrawWireCube(transform.position + size / 2, size);
+    }
+
+    public void SpawnSoil()
+    {
+        GenerateSoil();
     }
 }

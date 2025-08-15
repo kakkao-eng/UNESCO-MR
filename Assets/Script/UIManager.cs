@@ -26,6 +26,7 @@ public class UIManager : MonoBehaviour
     private bool fossilCompleted = false;
 
     private FossilSpawner fossilSpawner;
+    [SerializeField] private SoilGenerator soilGenerator;
 
     void Start()
     {
@@ -67,6 +68,9 @@ public class UIManager : MonoBehaviour
         {
             fossilSpawner.Spawn();
         }
+        if (soilGenerator != null)
+            soilGenerator.SpawnSoil();
+
         BgTimeText.gameObject.SetActive(true);
         toolPanel.SetActive(false);
         startButton.gameObject.SetActive(false); // ซ่อนปุ่ม Start

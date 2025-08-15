@@ -1300,6 +1300,7 @@ MonoBehaviour:
   stars:
   - {fileID: 407411184}
   gameTime: 120
+  soilGenerator: {fileID: 1050153978}
 --- !u!1001 &591777961
 PrefabInstance:
   m_ObjectHideFlags: 0

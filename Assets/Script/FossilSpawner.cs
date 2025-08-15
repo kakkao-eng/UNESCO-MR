@@ -16,7 +16,7 @@ public class FossilSpawner : MonoBehaviour
 
     void Start()
     {
-        SpawnRandomFossil();
+        
     }
 
     void SpawnRandomFossil()
