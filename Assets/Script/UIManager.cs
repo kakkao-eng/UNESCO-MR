@@ -16,8 +16,10 @@ public class UIManager : MonoBehaviour
 
     [Header("Game UI")]
     public GameObject GameOver;   //หน้าตอนแพ้ (เวลาหมด)
+    public GameObject ButtonUI;
     public Button startButton;       // ปุ่มเริ่มเกม (UI)
     public Button TryagainButton;
+    public Button ExitButton;
     public Image BgTimeText;
     public TMP_Text timerText;       // ข้อความเวลา (TMP)
     public Image[] stars;            // ไอคอนดาวแสดงคะแนน
@@ -192,6 +194,7 @@ public class UIManager : MonoBehaviour
     {
         gameRunning = false;
         GameOver.SetActive(true);
+        ButtonUI.SetActive(true);
         Debug.Log("Mission Fail!");
     }
 
