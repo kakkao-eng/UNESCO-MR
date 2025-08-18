@@ -994,7 +994,7 @@ GameObject:
   - component: {fileID: 407411184}
   - component: {fileID: 407411183}
   m_Layer: 5
-  m_Name: Button
+  m_Name: StartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1295,6 +1295,7 @@ MonoBehaviour:
   toolPanel: {fileID: 201129684}
   GameOver: {fileID: 941529439}
   startButton: {fileID: 407411183}
+  TryagainButton: {fileID: 1901392390}
   BgTimeText: {fileID: 1143141169}
   timerText: {fileID: 1295429368}
   stars:
@@ -1817,7 +1818,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: Start
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

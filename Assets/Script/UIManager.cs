@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// จัดการ UI และการเริ่มเกมใน MR
@@ -15,6 +16,7 @@ public class UIManager : MonoBehaviour
     [Header("Game UI")]
     public GameObject GameOver;   //หน้าตอนแพ้ (เวลาหมด)
     public Button startButton;       // ปุ่มเริ่มเกม (UI)
+    public Button TryagainButton;
     public Image BgTimeText;
     public TMP_Text timerText;       // ข้อความเวลา (TMP)
     public Image[] stars;            // ไอคอนดาวแสดงคะแนน
@@ -39,6 +41,7 @@ public class UIManager : MonoBehaviour
 
         // ผูก Event ปุ่ม Start
         startButton.onClick.AddListener(StartGame);
+        TryagainButton.onClick.AddListener(RestartGame);
 
         GameOver.SetActive(false);
     }
@@ -73,7 +76,7 @@ public class UIManager : MonoBehaviour
 
         BgTimeText.gameObject.SetActive(true);
         toolPanel.SetActive(false);
-        startButton.gameObject.SetActive(false); // ซ่อนปุ่ม Start
+        //startButton.gameObject.SetActive(false);
     }
 
     void Update()
@@ -143,6 +146,11 @@ public class UIManager : MonoBehaviour
         gameRunning = false;
         GameOver.SetActive(true);
         Debug.Log("Mission Fail!");
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     /// <summary>
