@@ -200,7 +200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 0.3726415, b: 0.3726415, a: 0.43137255}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1273,7 +1273,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 584893809}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af765641884a41048ba668105f065628, type: 3}
   m_Name: 
@@ -1300,6 +1300,7 @@ MonoBehaviour:
   timerText: {fileID: 1295429368}
   stars:
   - {fileID: 407411184}
+  warningOverlay: {fileID: 61824208}
   gameTime: 120
   soilGenerator: {fileID: 1050153978}
 --- !u!1001 &591777961

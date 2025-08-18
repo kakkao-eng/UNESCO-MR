@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 /// <summary>
 /// จัดการ UI และการเริ่มเกมใน MR
@@ -20,6 +21,10 @@ public class UIManager : MonoBehaviour
     public Image BgTimeText;
     public TMP_Text timerText;       // ข้อความเวลา (TMP)
     public Image[] stars;            // ไอคอนดาวแสดงคะแนน
+
+    [Header("Warning Effect")]
+    public Image warningOverlay;   // Image เต็มจอสีแดง (Canvas Overlay)
+    private Coroutine warningCoroutine;
 
     [Header("Game Settings")]
     public float gameTime = 120f;    // เวลารวม (2 นาที)
@@ -44,6 +49,9 @@ public class UIManager : MonoBehaviour
         TryagainButton.onClick.AddListener(RestartGame);
 
         GameOver.SetActive(false);
+
+        if (warningOverlay != null)
+            warningOverlay.gameObject.SetActive(false); // ปิด overlay ตอนเริ่มเกม
     }
 
     /// <summary>
@@ -77,6 +85,14 @@ public class UIManager : MonoBehaviour
         BgTimeText.gameObject.SetActive(true);
         toolPanel.SetActive(false);
         //startButton.gameObject.SetActive(false);
+
+        if (warningOverlay != null)
+        {
+            warningOverlay.gameObject.SetActive(false);
+            var color = warningOverlay.color;
+            color.a = 0f;
+            warningOverlay.color = color;
+        }
     }
 
     void Update()
@@ -91,11 +107,11 @@ public class UIManager : MonoBehaviour
             timerText.text = FormatTime(timeLeft);
 
             // เตือนเมื่อใกล้หมดเวลา
-            if (timeLeft <= 5 && !fossilCompleted)
-            {
-                ShowWarningEffect();
-            }
-
+            if (timeLeft <= 5 && !fossilCompleted && warningCoroutine == null)
+                {
+                    ShowWarningEffect();
+                    warningCoroutine = StartCoroutine(BlinkWarningOverlay());
+                }
             // หมดเวลาแล้วยังไม่เสร็จ
             if (timeLeft <= 0 && !fossilCompleted)
             {
@@ -112,6 +128,15 @@ public class UIManager : MonoBehaviour
         fossilCompleted = true;
         gameRunning = false;
         ShowStarScore();
+
+        if (warningCoroutine != null)
+        {
+            StopCoroutine(warningCoroutine);
+            warningCoroutine = null;
+        }
+
+        if (warningOverlay != null)
+            warningOverlay.gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -136,6 +161,28 @@ public class UIManager : MonoBehaviour
     void ShowWarningEffect()
     {
         timerText.color = Color.red;
+    }
+
+    IEnumerator BlinkWarningOverlay()
+    {
+        if (warningOverlay == null) yield break;
+
+        warningOverlay.gameObject.SetActive(true);
+        Color c = warningOverlay.color;
+
+        while (timeLeft > 0 && timeLeft <= 5 && !fossilCompleted)
+        {
+            // กระพริบ alpha 0 ↔ 0.4
+            c.a = (c.a < 0.2f) ? 0.4f : 0f;
+            warningOverlay.color = c;
+
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        // ปิด overlay หลังจากหมดเวลา/เกมเสร็จ
+        c.a = 0f;
+        warningOverlay.color = c;
+        warningOverlay.gameObject.SetActive(false);
     }
 
     /// <summary>
