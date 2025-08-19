@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// จัดการ UI และการเริ่มเกมใน MR
@@ -16,12 +17,14 @@ public class UIManager : MonoBehaviour
 
     [Header("Game UI")]
     public GameObject GameOver;   //หน้าตอนแพ้ (เวลาหมด)
+    public GameObject WinGame;
     public GameObject ButtonUI;
     public Button startButton;       // ปุ่มเริ่มเกม (UI)
     public Button TryagainButton;
     public Button ExitButton;
     public Image BgTimeText;
     public TMP_Text timerText;       // ข้อความเวลา (TMP)
+    public GameObject starUI;
     public Image[] stars;            // ไอคอนดาวแสดงคะแนน
 
     [Header("Warning Effect")]
@@ -110,16 +113,19 @@ public class UIManager : MonoBehaviour
 
             // เตือนเมื่อใกล้หมดเวลา
             if (timeLeft <= 5 && !fossilCompleted && warningCoroutine == null)
-                {
-                    ShowWarningEffect();
-                    warningCoroutine = StartCoroutine(BlinkWarningOverlay());
-                }
+            {
+                ShowWarningEffect();
+                warningCoroutine = StartCoroutine(BlinkWarningOverlay());
+            }
             // หมดเวลาแล้วยังไม่เสร็จ
             if (timeLeft <= 0 && !fossilCompleted)
             {
                 MissionFail();
             }
         }
+
+        if (Keyboard.current != null && Keyboard.current.pKey.wasPressedThisFrame)
+            CompleteFossil();
     }
 
     /// <summary>
@@ -129,6 +135,10 @@ public class UIManager : MonoBehaviour
     {
         fossilCompleted = true;
         gameRunning = false;
+        starUI.SetActive(true);
+        WinGame.SetActive(true);
+        ButtonUI.SetActive(true);
+
         ShowStarScore();
 
         if (warningCoroutine != null)

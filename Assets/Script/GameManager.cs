@@ -20,19 +20,16 @@ public class GameManager : MonoBehaviour
     private bool isGameComplete = false;
 
     private static GameManager _instance;
+     private static bool isShuttingDown = false;
     public static GameManager Instance
     {
         get
         {
+            if (isShuttingDown) return null;
+
             if (_instance == null)
-            {
                 _instance = FindObjectOfType<GameManager>();
-                if (_instance == null)
-                {
-                    GameObject go = new GameObject("GameManager");
-                    _instance = go.AddComponent<GameManager>();
-                }
-            }
+
             return _instance;
         }
     }
@@ -47,14 +44,24 @@ public class GameManager : MonoBehaviour
         else if (_instance != this)
         {
             Destroy(gameObject);
+            return; 
         }
 
         InitializeGame();
     }
 
+    void OnApplicationQuit()
+    {
+        isShuttingDown = true;
+    }
     void Start()
     {
         UpdateUI();
+    }
+    void OnDestroy()
+    {
+        if (_instance == this)
+            _instance = null;
     }
 
     public void InitializeGame()

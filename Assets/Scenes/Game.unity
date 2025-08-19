@@ -1347,7 +1347,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 584893809}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af765641884a41048ba668105f065628, type: 3}
   m_Name: 
@@ -1368,12 +1368,14 @@ MonoBehaviour:
   toolBoxObject: {fileID: 1187816055}
   toolPanel: {fileID: 201129684}
   GameOver: {fileID: 520338472}
+  WinGame: {fileID: 1208608315}
   ButtonUI: {fileID: 1694089153}
   startButton: {fileID: 407411183}
   TryagainButton: {fileID: 1901392390}
   ExitButton: {fileID: 779441193}
   BgTimeText: {fileID: 1143141169}
   timerText: {fileID: 1295429368}
+  starUI: {fileID: 2022211079}
   stars:
   - {fileID: 407411184}
   warningOverlay: {fileID: 61824208}
