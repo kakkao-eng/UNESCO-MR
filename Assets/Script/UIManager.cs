@@ -52,6 +52,7 @@ public class UIManager : MonoBehaviour
         // ผูก Event ปุ่ม Start
         startButton.onClick.AddListener(StartGame);
         TryagainButton.onClick.AddListener(RestartGame);
+        ExitButton.onClick.AddListener(exitGame);
 
         GameOver.SetActive(false);
 
@@ -89,7 +90,6 @@ public class UIManager : MonoBehaviour
 
         BgTimeText.gameObject.SetActive(true);
         toolPanel.SetActive(false);
-        //startButton.gameObject.SetActive(false);
 
         if (warningOverlay != null)
         {
@@ -213,6 +213,10 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    void exitGame()
+    {
+        Application.Quit();
+    }
     /// <summary>
     /// แปลงเวลาเป็นรูปแบบ mm:ss
     /// </summary>
