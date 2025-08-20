@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     [Header("ToolBox Settings")]
     public GameObject toolBoxObject; // วัตถุ ToolBox ในโลก MR (มี Interactable)
     public GameObject toolPanel;     // UI Panel ที่มีปุ่ม Start + วิธีใช้เครื่องมือ
+    public GameObject FivetoolObject; // อุปกรณ์ 5 อย่าง
 
     [Header("Game UI")]
     public GameObject GameOver;   //หน้าตอนแพ้ (เวลาหมด)
@@ -44,6 +45,7 @@ public class UIManager : MonoBehaviour
     {
         // เริ่มต้นให้แสดงเฉพาะ ToolBox
         toolPanel.SetActive(false);
+        FivetoolObject.SetActive(false);
         timerText.text = FormatTime(gameTime);
 
         // หา FossilSpawner ในฉาก
@@ -77,6 +79,7 @@ public class UIManager : MonoBehaviour
     /// </summary>
     void StartGame()
     {
+        FivetoolObject.SetActive(true);
         timeLeft = gameTime;
         gameRunning = true;
 
