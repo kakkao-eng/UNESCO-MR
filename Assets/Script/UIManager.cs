@@ -45,7 +45,6 @@ public class UIManager : MonoBehaviour
     {
         // เริ่มต้นให้แสดงเฉพาะ ToolBox
         toolPanel.SetActive(false);
-        FivetoolObject.SetActive(false);
         timerText.text = FormatTime(gameTime);
 
         // หา FossilSpawner ในฉาก
@@ -68,6 +67,7 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void OpenToolBoxFromMR()
     {
+        FivetoolObject.SetActive(true);
         toolPanel.SetActive(true);           // แสดง UI เครื่องมือ
         startButton.gameObject.SetActive(true); // แสดงปุ่ม Start
         toolBoxObject.SetActive(false);      // ซ่อน ToolBox ออกจากฉาก
