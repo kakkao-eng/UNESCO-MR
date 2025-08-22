@@ -92,7 +92,7 @@ public class UIManager : MonoBehaviour
             soilGenerator.SpawnSoil();
 
         BgTimeText.gameObject.SetActive(true);
-        toolPanel.SetActive(false);
+        startButton.gameObject.SetActive(false);
 
         if (warningOverlay != null)
         {
