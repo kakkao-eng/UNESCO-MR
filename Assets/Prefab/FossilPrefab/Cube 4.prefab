@@ -122,6 +122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fossilId: 4
+  ModelFossilID: 4
   durability: 10
   currentState: 0
   damagedMaterial: {fileID: 0}

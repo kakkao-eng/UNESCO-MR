@@ -2003,6 +2003,7 @@ MonoBehaviour:
   - {fileID: 1192208266}
   - {fileID: 21475498}
   - {fileID: 1753746969}
+  SpawnModelFossills: {fileID: 0}
   warningOverlay: {fileID: 61824208}
   gameTime: 120
   soilGenerator: {fileID: 1050153978}
@@ -3158,6 +3159,7 @@ GameObject:
   - component: {fileID: 941529443}
   - component: {fileID: 941529442}
   - component: {fileID: 941529441}
+  - component: {fileID: 941529444}
   m_Layer: 5
   m_Name: WinFailCanvas
   m_TagString: Untagged
@@ -3250,6 +3252,19 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &941529444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941529439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c874e2f5d63f4100af230375655134c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ModelFossils: {fileID: 11400000, guid: 3b48f59d2d7f03d48999bdb40c92b22c, type: 2}
 --- !u!1 &970263794
 GameObject:
   m_ObjectHideFlags: 0

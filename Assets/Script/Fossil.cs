@@ -12,6 +12,10 @@ public class Fossil : MonoBehaviour
     private int fossilId;
 
     [SerializeField]
+    [Tooltip("ID Model ของฟอสซิลใน FossilData")]
+    private int ModelFossilID;
+
+    [SerializeField]
     [Tooltip("ความทนทานของฟอสซิล")]
     private float durability = 100f;
 
