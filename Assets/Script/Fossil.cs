@@ -7,7 +7,7 @@ using Script.Tool_Example;
 public class Fossil : MonoBehaviour
 {
     [Header("Fossil Properties")]
-    [SerializeField] 
+    [SerializeField]
     [Tooltip("ID ของฟอสซิลใน FossilData")]
     private int fossilId;
 
@@ -30,7 +30,7 @@ public class Fossil : MonoBehaviour
     private Material cleanedMaterial;
     [SerializeField]
     private Material repairedMaterial;
-    
+
     [Header("Effects")]
     [SerializeField]
     private ParticleSystem damageEffect;
@@ -47,7 +47,7 @@ public class Fossil : MonoBehaviour
     private bool isFading = false;
 
     [Header("Fall Settings")]
-    [SerializeField] 
+    [SerializeField]
     private float requiredClearedBlocks = 4; // จำนวนบล็อกขั้นต่ำที่ต้องถูกขุด
     [SerializeField]
     private float fallSpeed = 5f; // ความเร็วในการตก
@@ -70,7 +70,7 @@ public class Fossil : MonoBehaviour
         fossilRenderer = GetComponent<Renderer>();
         if (fossilRenderer != null)
             originalMaterial = fossilRenderer.material;
-        
+
         currentDurability = durability;
     }
 
@@ -202,7 +202,7 @@ public class Fossil : MonoBehaviour
     {
         // ตรวจสอบบล็อกสีเหลืองที่เหลืออยู่รอบๆ
         Collider[] nearbyBlocks = Physics.OverlapSphere(
-            transform.position, 
+            transform.position,
             1f, // รัศมีในการตรวจสอบ
             LayerMask.GetMask("Soil")
         );
@@ -228,7 +228,7 @@ public class Fossil : MonoBehaviour
     {
         isFalling = true;
         SetState(FossilState.Excavated);
-        
+
         // เพิ่ม Rigidbody สำหรับการตก
         if (!TryGetComponent<Rigidbody>(out var rb))
         {
@@ -238,7 +238,7 @@ public class Fossil : MonoBehaviour
         rb.mass = 10f;
         rb.linearDamping = 1f;
         rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
-        
+
         StartCoroutine(CheckGroundContact());
     }
 
@@ -269,12 +269,19 @@ public class Fossil : MonoBehaviour
             Destroy(rb);
         }
 
+        UIManager ui = FindObjectOfType<UIManager>();
+        if (ui != null)
+        {
+            ui.CompleteFossil(this);
+        }
+
         // จบเกมทันทีเมื่อฟอสซิลตกลงมาและหยุดนิ่ง
-        GameManager.Instance.CompleteGame();
+        //GameManager.Instance.CompleteGame();
     }
 
     // Getter methods
     public FossilState GetCurrentState() => currentState;
     public float GetDurability() => currentDurability;
     public int GetFossilId() => fossilId;
+    public int GetModelFossilId() => ModelFossilID;
 }

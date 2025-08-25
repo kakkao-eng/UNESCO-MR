@@ -27,6 +27,11 @@ public class UIManager : MonoBehaviour
     public TMP_Text timerText;       // ข้อความเวลา (TMP)
     public GameObject starUI;
     public Image[] stars;            // ไอคอนดาวแสดงคะแนน
+    [Header("Fossil Display")]
+    public Transform fossilDisplayPoint;   // จุดวางโมเดลฟอสซิล
+    public FossilData fossilData;          // ScriptableObject ที่เก็บ prefab fossil
+    private GameObject currentFossilModel; // ตัว fossil ที่ spawn
+
 
     [Header("Warning Effect")]
     public Image warningOverlay;   // Image เต็มจอสีแดง (Canvas Overlay)
@@ -127,14 +132,26 @@ public class UIManager : MonoBehaviour
             }
         }
 
+        // ✅ Debug: กด P → หา Fossil ในฉาก แล้วโชว์ Model ตาม ID ของมัน
         if (Keyboard.current != null && Keyboard.current.pKey.wasPressedThisFrame)
-            CompleteFossil();
+        {
+            Fossil fossil = FindObjectOfType<Fossil>(); // หาอันแรกที่ spawn
+            if (fossil != null)
+            {
+                Debug.Log($"DEBUG: Found Fossil ID={fossil.GetFossilId()}, ModelID={fossil.GetModelFossilId()}");
+                CompleteFossil(fossil); 
+            }
+            else
+            {
+                Debug.LogWarning("DEBUG: ไม่เจอ Fossil ในฉาก!");
+            }
+        }
     }
 
     /// <summary>
     /// เรียกเมื่อขุดฟอสซิลเสร็จ
     /// </summary>
-    public void CompleteFossil()
+    public void CompleteFossil(Fossil fossil)
     {
         fossilCompleted = true;
         gameRunning = false;
@@ -152,6 +169,13 @@ public class UIManager : MonoBehaviour
 
         if (warningOverlay != null)
             warningOverlay.gameObject.SetActive(false);
+        
+        // ✅ แสดงโมเดลจาก Fossil ที่ส่งมา
+        if (fossil != null)
+        {
+            ShowFossilModel(fossil.GetModelFossilId());
+            Debug.Log($"ShowFossilModel: Spawn model ID {fossil.GetModelFossilId()}");
+        }
     }
 
     /// <summary>
@@ -220,6 +244,30 @@ public class UIManager : MonoBehaviour
     {
         Application.Quit();
     }
+
+    void ShowFossilModel(int modelId)
+    {
+        if (currentFossilModel != null)
+            {
+                Destroy(currentFossilModel);
+            }
+
+        if (fossilData != null && fossilData.ModelFossil.Length > modelId)
+        {
+            currentFossilModel = Instantiate(
+                fossilData.ModelFossil[modelId], 
+                fossilDisplayPoint.position, 
+                fossilDisplayPoint.rotation
+            );
+
+            currentFossilModel.transform.localScale = Vector3.one * 0.5f; // ปรับขนาด
+        }
+        else
+        {
+            Debug.LogWarning($"ModelFossilId {modelId} ไม่พบใน FossilData");
+        }
+    }
+
     /// <summary>
     /// แปลงเวลาเป็นรูปแบบ mm:ss
     /// </summary>
