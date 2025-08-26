@@ -260,7 +260,7 @@ public class UIManager : MonoBehaviour
                 fossilDisplayPoint.rotation
             );
 
-            currentFossilModel.transform.localScale = Vector3.one * 0.5f; // ปรับขนาด
+            //currentFossilModel.transform.localScale = Vector3.one * 0.5f; // ปรับขนาด
         }
         else
         {
