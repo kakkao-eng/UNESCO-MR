@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: FossilData
   m_EditorClassIdentifier: 
   fossilPrefabs:
-  - {fileID: 3910935032974795272, guid: 263b2e14d37e2f14c9b5030884c9e981, type: 3}
-  - {fileID: 3910935032974795272, guid: d7380aa61e485bd4bb702a7d9c192a9b, type: 3}
-  - {fileID: 3910935032974795272, guid: 3764b829fdb6b4d4cbb6169ccca02999, type: 3}
-  - {fileID: 3910935032974795272, guid: 292f58d2b37b49b4baaaaf78eb6b1c46, type: 3}
-  - {fileID: 3910935032974795272, guid: e0bb3a59b7313ca428993874748c44bb, type: 3}
-  - {fileID: 3910935032974795272, guid: 377fcc4acea13244da7ac22571a8bd40, type: 3}
-  - {fileID: 3910935032974795272, guid: d933a50f4eea8554f88560adf9ce50b3, type: 3}
-  - {fileID: 3910935032974795272, guid: e1cf42a29a003ba48be797a066e3492f, type: 3}
-  - {fileID: 3910935032974795272, guid: 9cca4a38794fbc74a8e7117ebc74a3a0, type: 3}
-  - {fileID: 3910935032974795272, guid: 123b305834535b24dafe962e52a674ea, type: 3}
-  - {fileID: 3910935032974795272, guid: 51da6310fa56aab44ad71ede101c5a45, type: 3}
+  - {fileID: 1317235826193098632, guid: d339d98daaf9e45588937b01bb4cca6c, type: 3}
+  - {fileID: 1317235826193098632, guid: d339d98daaf9e45588937b01bb4cca6c, type: 3}
+  - {fileID: 1317235826193098632, guid: d339d98daaf9e45588937b01bb4cca6c, type: 3}
+  - {fileID: 1317235826193098632, guid: d339d98daaf9e45588937b01bb4cca6c, type: 3}
+  - {fileID: 1317235826193098632, guid: d339d98daaf9e45588937b01bb4cca6c, type: 3}
+  - {fileID: 1317235826193098632, guid: d339d98daaf9e45588937b01bb4cca6c, type: 3}
+  - {fileID: 1317235826193098632, guid: d339d98daaf9e45588937b01bb4cca6c, type: 3}
+  - {fileID: 1317235826193098632, guid: d339d98daaf9e45588937b01bb4cca6c, type: 3}
+  - {fileID: 1317235826193098632, guid: d339d98daaf9e45588937b01bb4cca6c, type: 3}
+  - {fileID: 1317235826193098632, guid: d339d98daaf9e45588937b01bb4cca6c, type: 3}
+  - {fileID: 1317235826193098632, guid: d339d98daaf9e45588937b01bb4cca6c, type: 3}
   fossilNames:
   - "\u0E0A\u0E49\u0E32\u0E07\u0E2A\u0E35\u0E48\u0E07\u0E32\u0E01\u0E2D\u0E21\u0E42\u0E1F\u0E18\u0E35\u0E40\u0E23\u0E35\u0E22\u0E21"
   - "\u0E0A\u0E49\u0E32\u0E07\u0E07\u0E32\u0E08\u0E2D\u0E1A\u0E42\u0E1B\u0E23\u0E44\u0E14\u0E42\u0E19\u0E18\u0E35\u0E40\u0E23\u0E35\u0E22\u0E21"
