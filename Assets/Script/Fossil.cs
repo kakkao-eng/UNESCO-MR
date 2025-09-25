@@ -85,6 +85,7 @@ public class Fossil : MonoBehaviour
         // เล่นเอฟเฟกต์เมื่อได้รับความเสียหาย
         if (damageEffect != null)
             damageEffect.Play();
+            SoundManager.PlaySound(SoundType.WarningHitFossil);
 
         if (currentDurability <= 0)
         {

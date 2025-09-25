@@ -48,6 +48,7 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
+        SoundManager.PlaySound(SoundType.Background);
         // เริ่มต้นให้แสดงเฉพาะ ToolBox
         toolPanel.SetActive(false);
         timerText.text = FormatTime(gameTime);
@@ -76,6 +77,7 @@ public class UIManager : MonoBehaviour
         toolPanel.SetActive(true);           // แสดง UI เครื่องมือ
         startButton.gameObject.SetActive(true); // แสดงปุ่ม Start
         toolBoxObject.SetActive(false);      // ซ่อน ToolBox ออกจากฉาก
+        SoundManager.PlaySound(SoundType.ClickBox);
         Debug.Log("ToolBox opened - Start button shown");
     }
 
@@ -145,6 +147,7 @@ public class UIManager : MonoBehaviour
         ButtonUI.SetActive(true);
 
         ShowStarScore();
+        SoundManager.PlaySound(SoundType.WinGameSound);
 
         if (warningCoroutine != null)
         {
@@ -199,6 +202,7 @@ public class UIManager : MonoBehaviour
             // กระพริบ alpha 0 ↔ 0.4
             c.a = (c.a < 0.2f) ? 0.4f : 0f;
             warningOverlay.color = c;
+            SoundManager.PlaySound(SoundType.WarningTime);
 
             yield return new WaitForSeconds(0.5f);
         }
@@ -218,6 +222,7 @@ public class UIManager : MonoBehaviour
         GameOver.SetActive(true);
         ButtonUI.SetActive(true);
         Debug.Log("Mission Fail!");
+        SoundManager.PlaySound(SoundType.LoseGameSound);
     }
 
     public void RestartGame()

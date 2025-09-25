@@ -7,6 +7,7 @@ public enum SoundType
 {
     Background,
     ClickButton,
+    ClickBox,
     WinGameSound,
     LoseGameSound,
     WarningTime,
@@ -38,6 +39,24 @@ public class SoundManager : MonoBehaviour
         AudioClip[] clips = instance.soundlist[(int)sound].Sounds;
         AudioClip randomClip = clips[UnityEngine.Random.Range(0, clips.Length)];
         instance.audioSource.PlayOneShot(randomClip, volume);
+    }
+    public static void PlayLoop(SoundType sound, float volume = 1)
+    {
+        AudioClip[] clips = instance.soundlist[(int)sound].Sounds;
+        if (clips == null || clips.Length == 0) return;
+
+        AudioClip clip = clips[0]; // ใช้อันแรก (Background มักมีอันเดียว)
+        instance.audioSource.clip = clip;
+        instance.audioSource.volume = volume;
+        instance.audioSource.loop = true;
+        instance.audioSource.Play();
+    }
+    public static void StopSound()
+    {
+        if (instance.audioSource.isPlaying)
+        {
+            instance.audioSource.Stop();
+        }
     }
 #if UNITY_EDITOR
     void OnEnable()
