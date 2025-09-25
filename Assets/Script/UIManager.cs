@@ -131,21 +131,6 @@ public class UIManager : MonoBehaviour
                 MissionFail();
             }
         }
-
-        // ✅ Debug: กด P → หา Fossil ในฉาก แล้วโชว์ Model ตาม ID ของมัน
-        if (Keyboard.current != null && Keyboard.current.pKey.wasPressedThisFrame)
-        {
-            Fossil fossil = FindObjectOfType<Fossil>(); // หาอันแรกที่ spawn
-            if (fossil != null)
-            {
-                Debug.Log($"DEBUG: Found Fossil ID={fossil.GetFossilId()}, ModelID={fossil.GetModelFossilId()}");
-                CompleteFossil(fossil); 
-            }
-            else
-            {
-                Debug.LogWarning("DEBUG: ไม่เจอ Fossil ในฉาก!");
-            }
-        }
     }
 
     /// <summary>
