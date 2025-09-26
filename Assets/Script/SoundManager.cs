@@ -37,6 +37,8 @@ public class SoundManager : MonoBehaviour
     public static void PlaySound(SoundType sound, float volume = 1)
     {
         AudioClip[] clips = instance.soundlist[(int)sound].Sounds;
+        if (clips == null || clips.Length == 0) return;
+
         AudioClip randomClip = clips[UnityEngine.Random.Range(0, clips.Length)];
         instance.audioSource.PlayOneShot(randomClip, volume);
     }
@@ -45,7 +47,7 @@ public class SoundManager : MonoBehaviour
         AudioClip[] clips = instance.soundlist[(int)sound].Sounds;
         if (clips == null || clips.Length == 0) return;
 
-        AudioClip clip = clips[0]; // ใช้อันแรก (Background มักมีอันเดียว)
+        AudioClip clip = clips[(int)sound];
         instance.audioSource.clip = clip;
         instance.audioSource.volume = volume;
         instance.audioSource.loop = true;
