@@ -32,6 +32,7 @@ public class UIManager : MonoBehaviour
     public FossilData fossilData;          // ScriptableObject ที่เก็บ prefab fossil
     private GameObject currentFossilModel; // ตัว fossil ที่ spawn
 
+    public GameObject dataFossilUI;
 
     [Header("Warning Effect")]
     public Image warningOverlay;   // Image เต็มจอสีแดง (Canvas Overlay)
@@ -62,6 +63,9 @@ public class UIManager : MonoBehaviour
         ExitButton.onClick.AddListener(exitGame);
 
         GameOver.SetActive(false);
+        WinGame.SetActive(false);
+        ButtonUI.SetActive(false);
+        dataFossilUI.SetActive(false);
 
         if (warningOverlay != null)
             warningOverlay.gameObject.SetActive(false); // ปิด overlay ตอนเริ่มเกม
@@ -146,6 +150,7 @@ public class UIManager : MonoBehaviour
         WinGame.SetActive(true);
         ButtonUI.SetActive(true);
         toolPanel.SetActive(false);
+        dataFossilUI.SetActive(true);
 
         ShowStarScore();
         SoundManager.PlaySound(SoundType.WinGameSound);
