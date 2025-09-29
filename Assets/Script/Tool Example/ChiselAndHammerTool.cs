@@ -21,8 +21,6 @@ public class ChiselAndHammerTool : MonoBehaviour
     public Transform toolTip;
     public SoilGenerator soilGenerator;
     public ParticleSystem hitEffect;
-    public AudioSource audioSource;
-    public AudioClip hitSound;
 
     [Header("Layer Settings")]
     public LayerMask soilLayerMask;
@@ -94,10 +92,7 @@ public class ChiselAndHammerTool : MonoBehaviour
             hitEffect.Play();
         }
 
-        if (audioSource != null && hitSound != null)
-        {
-            audioSource.PlayOneShot(hitSound);
-        }
+        SoundManager.PlaySound(SoundType.Hammer);
 
         // ขุดบล็อก
         RaycastHit[] hits = Physics.SphereCastAll(

@@ -67,6 +67,7 @@ public class DrillTool : MonoBehaviour
         isDrilling = true;
         if (drillParticles != null)
             drillParticles.Play();
+        SoundManager.PlayLoop(SoundType.Drill);
     }
 
     private void StopDrilling()
@@ -74,6 +75,7 @@ public class DrillTool : MonoBehaviour
         isDrilling = false;
         if (drillParticles != null)
             drillParticles.Stop();
+        SoundManager.StopSound();
     }
 
     private void PerformDrill()

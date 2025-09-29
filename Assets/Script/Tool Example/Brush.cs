@@ -8,15 +8,6 @@ public class Brush : MonoBehaviour
     
     [Header("Effects")]
     public ParticleSystem dustEffect;        // เอฟเฟกต์ฝุ่น
-    public AudioClip brushSound;            // เสียงแปรง
-    private AudioSource audioSource;
-
-    void Start()
-    {
-        audioSource = GetComponent<AudioSource>();
-        if (audioSource == null)
-            audioSource = gameObject.AddComponent<AudioSource>();
-    }
 
     public void UseBrush(Vector3 position)
     {
@@ -43,9 +34,9 @@ public class Brush : MonoBehaviour
         }
         
         // เล่นเสียงถ้าแปรงโดนดิน
-        if (hitSomething && brushSound != null && audioSource != null)
+        if (hitSomething)
         {
-            audioSource.PlayOneShot(brushSound);
+            SoundManager.PlaySound(SoundType.Brush);
         }
     }
 

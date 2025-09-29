@@ -145,6 +145,7 @@ public class UIManager : MonoBehaviour
         starUI.SetActive(true);
         WinGame.SetActive(true);
         ButtonUI.SetActive(true);
+        toolPanel.SetActive(false);
 
         ShowStarScore();
         SoundManager.PlaySound(SoundType.WinGameSound);
@@ -221,6 +222,7 @@ public class UIManager : MonoBehaviour
         gameRunning = false;
         GameOver.SetActive(true);
         ButtonUI.SetActive(true);
+        toolPanel.SetActive(false);
         Debug.Log("Mission Fail!");
         SoundManager.PlaySound(SoundType.LoseGameSound);
     }

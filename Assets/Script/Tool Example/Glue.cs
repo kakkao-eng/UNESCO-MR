@@ -10,15 +10,7 @@ public class Glue : MonoBehaviour
     
     [Header("Effects")]
     public ParticleSystem glueEffect;      // เอฟเฟกต์กาว
-    public AudioClip glueSound;           // เสียงกาว
-    private AudioSource audioSource;
 
-    void Start()
-    {
-        audioSource = GetComponent<AudioSource>();
-        if (audioSource == null)
-            audioSource = gameObject.AddComponent<AudioSource>();
-    }
 
     public void UseGlue(Vector3 position)
     {
@@ -28,7 +20,7 @@ public class Glue : MonoBehaviour
         // หาฟอสซิลในรัศมี
         Collider[] hits = Physics.OverlapSphere(position, glueRadius);
         bool repaired = false;
-        
+
         foreach (var hit in hits)
         {
             Fossil fossil = hit.GetComponent<Fossil>();
@@ -50,13 +42,9 @@ public class Glue : MonoBehaviour
                 }
             }
         }
-        
+
         // เล่นเสียงถ้าซ่อมสำเร็จ
-        if (repaired && glueSound != null && audioSource != null)
-        {
-            audioSource.pitch = Random.Range(0.9f, 1.1f);
-            audioSource.PlayOneShot(glueSound);
-        }
+        SoundManager.PlaySound(SoundType.Glue);
     }
 
     // สำหรับแสดง Gizmos ในหน้า Editor
