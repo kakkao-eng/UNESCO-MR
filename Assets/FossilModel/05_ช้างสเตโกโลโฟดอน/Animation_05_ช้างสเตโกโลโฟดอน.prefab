@@ -71,5 +71,54 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2368565e9d8124f4f8e8085233cef579, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6068665064449095295}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2368565e9d8124f4f8e8085233cef579, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3815317882718015049}
   m_SourcePrefab: {fileID: 100100000, guid: 2368565e9d8124f4f8e8085233cef579, type: 3}
+--- !u!1 &5322316336438378720 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 2368565e9d8124f4f8e8085233cef579, type: 3}
+  m_PrefabInstance: {fileID: 4980351527205354929}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &6068665064449095295
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5322316336438378720}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2387275ef129a4ffd9c740e3ab43e143, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3815317882718015049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5322316336438378720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0baacea1bd804d4da62e78c7f4c935b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 6068665064449095295}
+  animationStateName: Idle
+  rotationSpeed: 15
+  rotate: 1
