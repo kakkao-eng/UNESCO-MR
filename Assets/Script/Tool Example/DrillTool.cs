@@ -83,7 +83,7 @@ public class DrillTool : MonoBehaviour
         if (soilGenerator == null) return;
 
         RaycastHit hit;
-        if (Physics.Raycast(drillTip.position, drillTip.forward, out hit, maxDrillDistance, soilLayerMask | fossilLayerMask))
+        if (Physics.Raycast(drillTip.position, drillTip.up, out hit, maxDrillDistance, soilLayerMask | fossilLayerMask))
         {
             // ตรวจสอบว่าชนกับอะไร
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Soil"))
@@ -122,12 +122,12 @@ public class DrillTool : MonoBehaviour
         if (!showDrillRange || drillTip == null) return;
         
         Gizmos.color = drillRangeColor;
-        Gizmos.DrawLine(drillTip.position, drillTip.position + drillTip.forward * maxDrillDistance);
+        Gizmos.DrawLine(drillTip.position, drillTip.position + drillTip.up * maxDrillDistance);
         
         // วาดรัศมีการขุด
         Matrix4x4 originalMatrix = Gizmos.matrix;
-        Vector3 endPoint = drillTip.position + drillTip.forward * maxDrillDistance;
-        Quaternion rotation = Quaternion.LookRotation(drillTip.forward);
+        Vector3 endPoint = drillTip.position + drillTip.up * maxDrillDistance;
+        Quaternion rotation = Quaternion.LookRotation(drillTip.up);
         Gizmos.matrix = Matrix4x4.TRS(endPoint, rotation, Vector3.one);
         DrawGizmosCircle(Vector3.zero, drillRadius, 32);
         Gizmos.matrix = originalMatrix;

@@ -50,6 +50,7 @@ public class RotateYAndPlayOnButtonAuto : MonoBehaviour
 
         rotate = true;
         isPlaying = true;
+        SoundManager.PlaySound(SoundType.ClickButton);
 
         if (playButton != null)
             playButton.gameObject.SetActive(false);
