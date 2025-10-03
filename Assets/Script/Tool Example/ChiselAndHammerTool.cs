@@ -6,30 +6,30 @@ public class ChiselAndHammerTool : MonoBehaviour
 {
     public enum ToolMode
     {
-        Chisel,
-        Hammer
+        Chisel, // โหมดสิ่ว
+        Hammer  // โหมดค้อน
     }
 
     [Header("Tool Settings")]
-    public ToolMode currentMode;
-    public float maxDistance = 2f;
-    public float hitRadius = 0.2f;
-    public float hitForce = 20f;
-    public float maxHitDistance = 0.5f;
+    public ToolMode currentMode;       // โหมดปัจจุบัน (สลับสิ่ว/ค้อน)
+    public float maxDistance = 2f;     // ระยะสูงสุดของ Raycast
+    public float hitRadius = 0.2f;     // รัศมีการตี
+    public float hitForce = 20f;       // ดาเมจจากการตี
+    public float maxHitDistance = 0.5f;// ระยะสูงสุดที่ค้อนจะตีสิ่วได้
 
     [Header("References")]
-    public Transform toolTip;
-    public SoilGenerator soilGenerator;
-    public ParticleSystem hitEffect;
+    public Transform toolTip;          // จุดปลายของสิ่ว/ค้อน
+    public SoilGenerator soilGenerator;// อ้างถึงตัวที่จัดการดิน
+    public ParticleSystem hitEffect;   // เอฟเฟกต์เวลาโดนตี
 
     [Header("Layer Settings")]
     public LayerMask soilLayerMask;
     public LayerMask fossilLayerMask;
 
-    // สำหรับสิ่ว
-    private bool isAiming = false;
-    private Vector3 aimPoint;
-    private static ChiselAndHammerTool activeChisel; // เก็บสิ่วที่กำลังเล็งอยู่
+    // ตัวช่วยสำหรับสิ่ว
+    private bool isAiming = false;     // เช็คว่ากำลังเล็งสิ่วหรือไม่
+    private Vector3 aimPoint;          // จุดที่ Raycast ชน
+    private static ChiselAndHammerTool activeChisel; // สิ่วที่กำลังใช้งาน (ใช้คู่กับค้อน)
 
     private void Start()
     {
@@ -41,24 +41,25 @@ public class ChiselAndHammerTool : MonoBehaviour
     {
         if (currentMode == ToolMode.Chisel)
         {
-            UpdateChisel();
+            UpdateChisel(); // ทำงานโหมดสิ่ว
         }
         else if (currentMode == ToolMode.Hammer)
         {
-            UpdateHammer();
+            UpdateHammer(); // ทำงานโหมดค้อน
         }
     }
 
     private void UpdateChisel()
     {
+        // ยิง Raycast จากปลายสิ่วไปข้างหน้า
         RaycastHit hit;
         if (Physics.Raycast(toolTip.position, toolTip.forward, out hit, maxDistance, soilLayerMask | fossilLayerMask))
         {
             isAiming = true;
             aimPoint = hit.point;
-            activeChisel = this;
-            
-            // อาจจะเพิ่ม Visual feedback ที่นี่
+            activeChisel = this; // กำหนดว่านี่คือสิ่วที่ถูกเล็งอยู่
+
+            // เส้น debug
             Debug.DrawLine(toolTip.position, hit.point, Color.yellow);
         }
         else
@@ -71,12 +72,14 @@ public class ChiselAndHammerTool : MonoBehaviour
 
     private void UpdateHammer()
     {
+        // ถ้ากดคลิกซ้าย และมีสิ่วที่เล็งอยู่
         if (Mouse.current.leftButton.wasPressedThisFrame && activeChisel != null)
         {
+            // เช็คว่าค้อนอยู่ใกล้สิ่วพอหรือไม่
             float distanceToChisel = Vector3.Distance(transform.position, activeChisel.toolTip.position);
             if (distanceToChisel <= maxHitDistance)
             {
-                HitWithHammer();
+                HitWithHammer(); // ตีสิ่ว
             }
         }
     }
@@ -85,7 +88,7 @@ public class ChiselAndHammerTool : MonoBehaviour
     {
         if (!isAiming || activeChisel == null) return;
 
-        // เอฟเฟกต์การตี
+        // เล่นเอฟเฟกต์ตี
         if (hitEffect != null)
         {
             hitEffect.transform.position = aimPoint;
@@ -94,7 +97,7 @@ public class ChiselAndHammerTool : MonoBehaviour
 
         SoundManager.PlaySound(SoundType.Hammer);
 
-        // ขุดบล็อก
+        // ทำดาเมจต่อ Soil หรือ Fossil
         RaycastHit[] hits = Physics.SphereCastAll(
             activeChisel.toolTip.position, 
             hitRadius, 

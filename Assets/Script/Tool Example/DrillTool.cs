@@ -5,35 +5,35 @@ using UnityEngine.InputSystem;
 public class DrillTool : MonoBehaviour
 {
     [Header("Drill Settings")]
-    public float maxDrillDistance = 2f;    
-    public float drillDamage = 20f;       
-    public float drillRadius = 0.2f;      
-    public float drillInterval = 0.1f;    
-    
+    public float maxDrillDistance = 2f;    // ระยะเจาะสูงสุด
+    public float drillDamage = 20f;        // ดาเมจของสว่าน
+    public float drillRadius = 0.2f;       // รัศมีผลกระทบ
+    public float drillInterval = 0.1f;     // เวลาหน่วงระหว่างการเจาะ
+
     [Header("References")]
-    public SoilGenerator soilGenerator;
-    public Transform drillTip;              
-    public ParticleSystem drillParticles;   
-    
+    public SoilGenerator soilGenerator;    // ตัวจัดการดิน
+    public Transform drillTip;             // ปลายสว่าน
+    public ParticleSystem drillParticles;  // เอฟเฟกต์เจาะ
+
     [Header("Layer Settings")]
-    public LayerMask soilLayerMask;     
-    public LayerMask fossilLayerMask;   
-    
+    public LayerMask soilLayerMask;        // เลเยอร์ดิน
+    public LayerMask fossilLayerMask;      // เลเยอร์ฟอสซิล
+
     [Header("Debug Visualization")]
-    public bool showDrillRange = true;
+    public bool showDrillRange = true;     // แสดง Debug Line
     public Color drillRangeColor = Color.red;
-    
-    private float nextDrillTime;
-    private bool isDrilling;
+
+    private float nextDrillTime;           // เวลาเจาะครั้งถัดไป
+    private bool isDrilling;               // กำลังเจาะหรือไม่
 
     private void Start()
     {
         if (soilGenerator == null)
             soilGenerator = FindObjectOfType<SoilGenerator>();
-            
+
         if (drillTip == null)
             drillTip = transform;
-            
+
         if (drillParticles != null)
             drillParticles.Stop();
 
@@ -49,7 +49,7 @@ public class DrillTool : MonoBehaviour
             {
                 StartDrilling();
             }
-            
+
             if (Time.time >= nextDrillTime)
             {
                 PerformDrill();
@@ -85,30 +85,18 @@ public class DrillTool : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(drillTip.position, drillTip.up, out hit, maxDrillDistance, soilLayerMask | fossilLayerMask))
         {
-            // ตรวจสอบว่าชนกับอะไร
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Soil"))
             {
-                // ถ้าเป็นดิน
                 SoilBlock soilBlock = hit.collider.GetComponent<SoilBlock>();
-                if (soilBlock != null)
-                {
-                    soilBlock.TakeDamage(drillDamage);
-                }
-                
-                // ลบบล็อกดินในรัศมี
+                if (soilBlock != null) soilBlock.TakeDamage(drillDamage);
                 soilGenerator.ClearBlocksInArea(hit.point, drillRadius);
             }
             else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Fossil"))
             {
-                // ถ้าเป็นฟอสซิล
                 Fossil fossil = hit.collider.GetComponent<Fossil>();
-                if (fossil != null)
-                {
-                    fossil.TakeDamage(drillDamage, ToolType.ElectricDrill);
-                }
+                if (fossil != null) fossil.TakeDamage(drillDamage, ToolType.ElectricDrill);
             }
 
-            // แสดง particle effect ที่จุดชน
             if (drillParticles != null)
             {
                 drillParticles.transform.position = hit.point;
@@ -120,11 +108,10 @@ public class DrillTool : MonoBehaviour
     private void OnDrawGizmos()
     {
         if (!showDrillRange || drillTip == null) return;
-        
+
         Gizmos.color = drillRangeColor;
         Gizmos.DrawLine(drillTip.position, drillTip.position + drillTip.up * maxDrillDistance);
-        
-        // วาดรัศมีการขุด
+
         Matrix4x4 originalMatrix = Gizmos.matrix;
         Vector3 endPoint = drillTip.position + drillTip.up * maxDrillDistance;
         Quaternion rotation = Quaternion.LookRotation(drillTip.up);

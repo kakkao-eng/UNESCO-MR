@@ -3,21 +3,18 @@
 public class Glue : MonoBehaviour 
 {
     [Header("Glue Settings")]
-    public float glueRadius = 0.3f;        // รัศมีการทำงานของกาว
-    public float repairStrength = 0.2f;    // ความแรงในการซ่อมแซม (0-1)
+    public float glueRadius = 0.3f;        // รัศมีของกาว
+    public float repairStrength = 0.2f;    // ความแรงในการซ่อม
     public float glueAmount = 100f;        // ปริมาณกาวที่มี
-    public float glueUsagePerRepair = 5f;  // ปริมาณกาวที่ใช้ต่อครั้ง
-    
-    [Header("Effects")]
-    public ParticleSystem glueEffect;      // เอฟเฟกต์กาว
+    public float glueUsagePerRepair = 5f;  // กาวที่ใช้ต่อครั้ง
 
+    [Header("Effects")]
+    public ParticleSystem glueEffect;      // เอฟเฟกต์กาวเวลาใช้งาน
 
     public void UseGlue(Vector3 position)
     {
-        // ถ้ากาวหมด ไม่สามารถใช้งานได้
-        if (glueAmount <= 0) return;
+        if (glueAmount <= 0) return; // ถ้ากาวหมด ไม่ทำงาน
 
-        // หาฟอสซิลในรัศมี
         Collider[] hits = Physics.OverlapSphere(position, glueRadius);
         bool repaired = false;
 
@@ -26,14 +23,11 @@ public class Glue : MonoBehaviour
             Fossil fossil = hit.GetComponent<Fossil>();
             if (fossil != null && fossil.GetCurrentState() == Fossil.FossilState.Damaged)
             {
-                // ใช้กาวซ่อมฟอสซิล
-                fossil.Repair();
+                fossil.Repair(); // ซ่อมฟอสซิล
                 repaired = true;
 
-                // ลดปริมาณกาว
-                glueAmount -= glueUsagePerRepair;
+                glueAmount -= glueUsagePerRepair; // ลดจำนวนกาว
 
-                // เล่นเอฟเฟกต์
                 if (glueEffect != null)
                 {
                     var effect = Instantiate(glueEffect, hit.transform.position, Quaternion.identity);
@@ -43,26 +37,24 @@ public class Glue : MonoBehaviour
             }
         }
 
-        // เล่นเสียงถ้าซ่อมสำเร็จ
-        SoundManager.PlaySound(SoundType.Glue);
+        // เล่นเสียงถ้า Repair สำเร็จ
+        if (repaired) SoundManager.PlaySound(SoundType.Glue);
     }
 
-    // สำหรับแสดง Gizmos ในหน้า Editor
+    // Gizmos สำหรับ Debug
     void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(0, 1, 1, 0.2f);
         Gizmos.DrawSphere(transform.position, glueRadius);
     }
 
-    // สำหรับเช็คว่ากาวเหลือพอใช้หรือไม่
     public bool HasGlue()
     {
-        return glueAmount > 0;
+        return glueAmount > 0; // เช็คว่ามีกาวเหลือหรือไม่
     }
 
-    // สำหรับเติมกาว
     public void RefillGlue(float amount)
     {
-        glueAmount = Mathf.Min(glueAmount + amount, 100f);
+        glueAmount = Mathf.Min(glueAmount + amount, 100f); // เติมกาวแต่ไม่เกิน 100
     }
 }
