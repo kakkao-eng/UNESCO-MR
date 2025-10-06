@@ -24,25 +24,15 @@ public class SoilGenerator : MonoBehaviour
             Debug.LogError($"Layer '{soilLayerName}' not found. Please create this layer in Tags and Layers settings.");
             return;
         }
-
     }
 
     void GenerateSoil()
     {
-        // เคลียร์ของเก่าก่อน (เผื่อมีการสร้างใหม่)
-        foreach (var block in soilBlocks.Values)
-        {
-            if (block != null) Destroy(block);
-        }
-        soilBlocks.Clear();
-
         for (int x = 0; x < width; x++)
         {
             for (int z = 0; z < length; z++)
             {
-                // สุ่มความสูงของดินในตำแหน่งนี้
-                int randomHeight = Random.Range(1, height + 1); // อย่างน้อย 1 ชั้น สูงสุดเท่าที่กำหนด
-                for (int y = 0; y < randomHeight; y++)
+                for (int y = 0; y < height; y++)
                 {
                     Vector3 position = new Vector3(
                         x * blockSize,
@@ -119,9 +109,20 @@ public class SoilGenerator : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireCube(transform.position + size / 2, size);
     }
-
+    
     public void SpawnSoil()
+{
+    // ถ้ามีดินเก่าอยู่ ให้ลบออกก่อน
+    foreach (var block in soilBlocks.Values)
     {
-        GenerateSoil();
+        if (block != null)
+            Destroy(block);
     }
+    soilBlocks.Clear();
+
+    // สร้างดินใหม่ทั้งหมด
+    GenerateSoil();
+    Debug.Log("Spawned new soil blocks!");
+}
+
 }
