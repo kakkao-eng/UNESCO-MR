@@ -137,6 +137,8 @@ public class UIManager : MonoBehaviour
                 MissionFail();
             }
         }
+        if (Keyboard.current != null && Keyboard.current.tKey.wasPressedThisFrame) // กด T เพื่อเปิด/ปิด Toolbox
+            StartGame();
     }
 
     /// <summary>

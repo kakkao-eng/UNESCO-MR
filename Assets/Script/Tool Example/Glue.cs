@@ -1,20 +1,43 @@
 ﻿using UnityEngine;
+using UnityEngine.XR;
 
-public class Glue : MonoBehaviour 
+public class GlueUnlimited : MonoBehaviour 
 {
     [Header("Glue Settings")]
-    public float glueRadius = 0.3f;        // รัศมีของกาว
-    public float repairStrength = 0.2f;    // ความแรงในการซ่อม
-    public float glueAmount = 100f;        // ปริมาณกาวที่มี
-    public float glueUsagePerRepair = 5f;  // กาวที่ใช้ต่อครั้ง
+    public float glueRadius = 0.3f;             // รัศมีของกาว
+    public float repairStrength = 0.2f;         // ความแรงในการซ่อม
+    public Vector3 glueOffset = new Vector3(0,0,0.2f); // ปรับตำแหน่งกาวได้ใน Inspector
 
     [Header("Effects")]
-    public ParticleSystem glueEffect;      // เอฟเฟกต์กาวเวลาใช้งาน
+    public ParticleSystem glueEffect;           // เอฟเฟกต์กาวเวลาใช้งาน
+
+    [Header("Debug Visualization")]
+    public bool showGlueLine = true;            // แสดง Debug Line
+    public Color glueLineColor = Color.cyan;
+
+    private InputDevice rightHand;              // ตัวแทนมือขวา Pico
+    private Vector3 lastUsedPoint;              // เก็บตำแหน่งกาวล่าสุด
+
+    private void Start()
+    {
+        // ดึง Input มือขวา
+        rightHand = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
+    }
+
+    private void Update()
+    {
+        // ใช้กาวเมื่อกด Trigger มือขวา
+        if (rightHand.TryGetFeatureValue(CommonUsages.triggerButton, out bool triggerPressed) && triggerPressed)
+        {
+            // กำหนดตำแหน่งกาวตาม Offset
+            Vector3 targetPoint = transform.position + transform.TransformDirection(glueOffset);
+            UseGlue(targetPoint);
+            lastUsedPoint = targetPoint;
+        }
+    }
 
     public void UseGlue(Vector3 position)
     {
-        if (glueAmount <= 0) return; // ถ้ากาวหมด ไม่ทำงาน
-
         Collider[] hits = Physics.OverlapSphere(position, glueRadius);
         bool repaired = false;
 
@@ -26,8 +49,7 @@ public class Glue : MonoBehaviour
                 fossil.Repair(); // ซ่อมฟอสซิล
                 repaired = true;
 
-                glueAmount -= glueUsagePerRepair; // ลดจำนวนกาว
-
+                // เอฟเฟกต์กาว
                 if (glueEffect != null)
                 {
                     var effect = Instantiate(glueEffect, hit.transform.position, Quaternion.identity);
@@ -38,23 +60,17 @@ public class Glue : MonoBehaviour
         }
 
         // เล่นเสียงถ้า Repair สำเร็จ
-        if (repaired) SoundManager.PlaySound(SoundType.Glue);
+        if (repaired)
+            SoundManager.PlaySound(SoundType.Glue);
     }
 
-    // Gizmos สำหรับ Debug
-    void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
+        if (!showGlueLine) return;
+
+        // วาดรัศมี Glue ตามตำแหน่งล่าสุดหรือ Offset
+        Vector3 drawPosition = lastUsedPoint != Vector3.zero ? lastUsedPoint : transform.position + transform.TransformDirection(glueOffset);
         Gizmos.color = new Color(0, 1, 1, 0.2f);
-        Gizmos.DrawSphere(transform.position, glueRadius);
-    }
-
-    public bool HasGlue()
-    {
-        return glueAmount > 0; // เช็คว่ามีกาวเหลือหรือไม่
-    }
-
-    public void RefillGlue(float amount)
-    {
-        glueAmount = Mathf.Min(glueAmount + amount, 100f); // เติมกาวแต่ไม่เกิน 100
+        Gizmos.DrawSphere(drawPosition, glueRadius);
     }
 }
