@@ -1,82 +1,119 @@
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System;
+    using UnityEngine;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System;
 
-public enum SoundType
-{
-    Background,
-    ClickButton,
-    ClickBox,
-    WinGameSound,
-    LoseGameSound,
-    WarningTime,
-    WarningHitFossil,
-    Hammer,
-    Drill,
-    Brush,
-    Glue
-}
-
-[RequireComponent(typeof(AudioSource)), ExecuteInEditMode]
-public class SoundManager : MonoBehaviour
-{
-    [SerializeField] private Soundlist[] soundlist;
-    private static SoundManager instance;
-    private AudioSource audioSource;
-
-    private void Awake()
+    //Enum สำหรับระบุประเภทของเสียงที่มีในเกม
+    public enum SoundType
     {
-        instance = this;
+        Background,       
+        ClickButton,      
+        ClickBox,        
+        WinGameSound,     
+        LoseGameSound,    
+        WarningTime,      
+        WarningHitFossil, 
+        Hammer,        
+        Drill,          
+        Brush,            
+        Glue              
     }
 
-    private void Start()
+    [RequireComponent(typeof(AudioSource)), ExecuteInEditMode]
+    public class SoundManager : MonoBehaviour
     {
-        audioSource = GetComponent<AudioSource>();
-    }
-    public static void PlaySound(SoundType sound, float volume = 1)
-    {
-        AudioClip[] clips = instance.soundlist[(int)sound].Sounds;
-        if (clips == null || clips.Length == 0) return;
+        // รายการเก็บเสียงทั้งหมด (ตามชนิดของ SoundType)
+        [SerializeField] private Soundlist[] soundlist;
 
-        AudioClip randomClip = clips[UnityEngine.Random.Range(0, clips.Length)];
-        instance.audioSource.PlayOneShot(randomClip, volume);
-    }
-    public static void PlayLoop(SoundType sound, float volume = 1)
-    {
-        AudioClip[] clips = instance.soundlist[(int)sound].Sounds;
-        if (clips == null || clips.Length == 0) return;
+        //instance แบบ static สำหรับเรียกใช้จากสคริปต์อื่นได้ง่าย
+        private static SoundManager instance;
 
-        AudioClip clip = clips[(int)sound];
-        instance.audioSource.clip = clip;
-        instance.audioSource.volume = volume;
-        instance.audioSource.loop = true;
-        instance.audioSource.Play();
-    }
-    public static void StopSound()
-    {
-        if (instance.audioSource.isPlaying)
+        //ตัว AudioSource สำหรับเล่นเสียง
+        private AudioSource audioSource;
+
+        private void Awake()
         {
-            instance.audioSource.Stop();
+            // กำหนด instance ให้ตัวนี้เอง (singleton)
+            instance = this;
         }
-    }
-#if UNITY_EDITOR
-    void OnEnable()
-    {
-        string[] names = Enum.GetNames(typeof(SoundType));
-        Array.Resize(ref soundlist, names.Length);
-        for (int i = 0; i < soundlist.Length; i++)
-        {
-            soundlist[i].name = names[i];
-        }
-    }
-#endif
-}
 
-[Serializable]
-public struct Soundlist
-{
-    public AudioClip[] Sounds { get => sounds; }
-    [HideInInspector] public string name;
-    [SerializeField] private AudioClip[] sounds;
-}
+        private void Start()
+        {
+            // ดึง AudioSource ที่ติดอยู่กับ GameObject นี้
+            audioSource = GetComponent<AudioSource>();
+        }
+
+        //ฟังก์ชันสำหรับเล่นเสียงสั้น (PlayOneShot)
+        public static void PlaySound(SoundType sound, float volume = 1)
+        {
+            // ดึงชุดเสียงของประเภทที่เลือกจาก soundlist
+            AudioClip[] clips = instance.soundlist[(int)sound].Sounds;
+
+            // ถ้าไม่มีเสียงในลิสต์ ให้หยุดทำงานเลย
+            if (clips == null || clips.Length == 0) return;
+
+            // สุ่มเสียง 1 ตัวจากชุดเสียง (ถ้ามีหลายคลิป)
+            AudioClip randomClip = clips[UnityEngine.Random.Range(0, clips.Length)];
+
+            // เล่นเสียงแบบ OneShot (เล่นทับกันได้)
+            instance.audioSource.PlayOneShot(randomClip, volume);
+        }
+
+        //ฟังก์ชันเล่นเสียงแบบวน (loop)
+        public static void PlayLoop(SoundType sound, float volume = 1)
+        {
+            // ดึงชุดเสียงของประเภทนั้น
+            AudioClip[] clips = instance.soundlist[(int)sound].Sounds;
+
+            // ถ้าไม่มีเสียงให้หยุด
+            if (clips == null || clips.Length == 0) return;
+
+            // ใช้เสียงแรกของลิสต์ (ไม่สุ่ม)
+            AudioClip clip = clips[(int)sound];
+
+            // ตั้งค่า AudioSource ให้เล่นเสียงนี้แบบวนลูป
+            instance.audioSource.clip = clip;
+            instance.audioSource.volume = volume;
+            instance.audioSource.loop = true;
+            instance.audioSource.Play();
+        }
+
+        //หยุดเสียงที่กำลังเล่นอยู่
+        public static void StopSound()
+        {
+            if (instance.audioSource.isPlaying)
+            {
+                instance.audioSource.Stop();
+            }
+        }
+
+    #if UNITY_EDITOR
+        //ฟังก์ชันนี้จะทำงานเฉพาะใน Unity Editor เท่านั้น
+        //ใช้เพื่ออัปเดตชื่อเสียงใน Inspector ให้ตรงกับ Enum อัตโนมัติ
+        void OnEnable()
+        {
+            // ดึงชื่อทั้งหมดของ Enum SoundType
+            string[] names = Enum.GetNames(typeof(SoundType));
+
+            // ปรับขนาดอาเรย์ soundlist ให้มีเท่ากับจำนวน Enum
+            Array.Resize(ref soundlist, names.Length);
+
+            // วนใส่ชื่อของ Enum ลงใน soundlist เพื่อให้ง่ายต่อการดูใน Inspector
+            for (int i = 0; i < soundlist.Length; i++)
+            {
+                soundlist[i].name = names[i];
+            }
+        }
+    #endif
+    }
+
+    //โครงสร้างข้อมูลสำหรับเก็บเสียงของแต่ละประเภท
+    [Serializable]
+    public struct Soundlist
+    {
+        // Getter สำหรับดึงชุดเสียง (AudioClip[])
+        public AudioClip[] Sounds { get => sounds; }
+
+        [HideInInspector] public string name; // ใช้แสดงชื่อใน Inspector
+        [SerializeField] private AudioClip[] sounds; // เก็บเสียงที่เกี่ยวข้องกับประเภทนั้น
+    }
