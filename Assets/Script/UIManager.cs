@@ -224,7 +224,7 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// เมื่อหมดเวลาและภารกิจล้มเหลว
     /// </summary>
-    void MissionFail()
+    public void MissionFail()
     {
         gameRunning = false;
         GameOver.SetActive(true);

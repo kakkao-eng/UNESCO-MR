@@ -91,6 +91,11 @@ public class Fossil : MonoBehaviour
         {
             SetState(FossilState.Damaged);
             StartCoroutine(FadeOutAndDestroy());
+            UIManager uiManager = FindObjectOfType<UIManager>();
+            if (uiManager != null)
+            {
+                uiManager.MissionFail();
+            }
         }
 
         UpdateVisuals();

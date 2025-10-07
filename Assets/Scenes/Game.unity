@@ -1829,7 +1829,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cba65e144b7e4e79ad7b9f5f433f447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxDistance: 0.25
+  maxDistance: 0.2
   toolTip: {fileID: 282559965}
   hitEffect: {fileID: 0}
   soilLayerMask:
@@ -2904,15 +2904,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 403caae6fad3bc54abea71e1e7e49f5e, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.33
+      value: 1.78
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 403caae6fad3bc54abea71e1e7e49f5e, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2.33
+      value: 1.78
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 403caae6fad3bc54abea71e1e7e49f5e, type: 3}
       propertyPath: m_LocalScale.z
-      value: 2.33
+      value: 1.78
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 403caae6fad3bc54abea71e1e7e49f5e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2920,7 +2920,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 403caae6fad3bc54abea71e1e7e49f5e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.187
+      value: 0.724
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 403caae6fad3bc54abea71e1e7e49f5e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2928,19 +2928,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 403caae6fad3bc54abea71e1e7e49f5e, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 403caae6fad3bc54abea71e1e7e49f5e, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 403caae6fad3bc54abea71e1e7e49f5e, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 403caae6fad3bc54abea71e1e7e49f5e, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 403caae6fad3bc54abea71e1e7e49f5e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2952,7 +2952,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 403caae6fad3bc54abea71e1e7e49f5e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 403caae6fad3bc54abea71e1e7e49f5e, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -2998,7 +2998,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   glueRadius: 0.2
   repairStrength: 0.2
-  glueOffset: {x: 0, y: 0.5, z: 0}
+  glueOffset: {x: 0, y: 0.38, z: 0}
   glueEffect: {fileID: 0}
   showGlueLine: 1
   glueLineColor: {r: 0, g: 1, b: 1, a: 1}
@@ -6253,11 +6253,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6887576134703568863, guid: ebcc6d962399b194e8f25886f0cd0762, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6887576134703568863, guid: ebcc6d962399b194e8f25886f0cd0762, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6887576134703568863, guid: ebcc6d962399b194e8f25886f0cd0762, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -6948,15 +6948,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4031405565105938550, guid: c906ff9d20cb18f4195ad08991d2cbb7, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.67
+      value: 2.37
       objectReference: {fileID: 0}
     - target: {fileID: 4031405565105938550, guid: c906ff9d20cb18f4195ad08991d2cbb7, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2.67
+      value: 2.37
       objectReference: {fileID: 0}
     - target: {fileID: 4031405565105938550, guid: c906ff9d20cb18f4195ad08991d2cbb7, type: 3}
       propertyPath: m_LocalScale.z
-      value: 2.67
+      value: 2.37
       objectReference: {fileID: 0}
     - target: {fileID: 4031405565105938550, guid: c906ff9d20cb18f4195ad08991d2cbb7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6964,19 +6964,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4031405565105938550, guid: c906ff9d20cb18f4195ad08991d2cbb7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.376
+      value: 0.631
       objectReference: {fileID: 0}
     - target: {fileID: 4031405565105938550, guid: c906ff9d20cb18f4195ad08991d2cbb7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.41
+      value: -1.433
       objectReference: {fileID: 0}
     - target: {fileID: 4031405565105938550, guid: c906ff9d20cb18f4195ad08991d2cbb7, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4031405565105938550, guid: c906ff9d20cb18f4195ad08991d2cbb7, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4031405565105938550, guid: c906ff9d20cb18f4195ad08991d2cbb7, type: 3}
       propertyPath: m_LocalRotation.y
@@ -6988,7 +6988,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4031405565105938550, guid: c906ff9d20cb18f4195ad08991d2cbb7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 4031405565105938550, guid: c906ff9d20cb18f4195ad08991d2cbb7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -7403,8 +7403,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41cf9991521454579bc3e4bee756f759, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHitDistance: 0.15
-  hitRadius: 0.15
+  maxHitDistance: 0.4
+  hitRadius: 0.1
   hitForce: 20
   toolTipOffset: {x: 0, y: 0, z: 0.22}
   showGizmo: 1

@@ -6,7 +6,7 @@ public class HammerTool_Adjustable : MonoBehaviour
 {
     [Header("Hammer Settings")]
     public float maxHitDistance = 0.5f;   // ระยะตีสิ่ว
-    public float hitRadius = 0.2f;        // รัศมีทำลายดิน
+    public float hitRadius = 0.15f;        // รัศมีทำลายดิน
     public float hitForce = 20f;          // ดาเมจ
 
     [Header("Tip Offset")]
@@ -67,7 +67,7 @@ public class HammerTool_Adjustable : MonoBehaviour
             hitPosition, 
             hitRadius, 
             chisel.toolTip.forward, 
-            2f, 
+            0.2f, 
             chisel.soilLayerMask | chisel.fossilLayerMask
         );
 
