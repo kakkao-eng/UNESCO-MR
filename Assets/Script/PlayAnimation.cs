@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RotateYAndPlayOnButtonAuto : MonoBehaviour
+public class PlayAnimation : MonoBehaviour
 {
     [Header("Animation Settings")]
     public Animator animator;                  // Animator ของโมเดล
