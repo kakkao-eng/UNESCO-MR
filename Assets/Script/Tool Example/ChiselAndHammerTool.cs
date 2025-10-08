@@ -10,7 +10,7 @@ public class ChiselAndHammerTool : MonoBehaviour
     public ToolMode currentMode;       // โหมดปัจจุบัน
     public float maxDistance = 2f;     // ระยะ Raycast สูงสุด
     public float hitRadius = 0.2f;     // รัศมีการตี
-    public float hitForce = 20f;       // ดาเมจจากการตี
+    public float hitForce = 5f;       // ดาเมจจากการตี
     public float maxHitDistance = 0.5f;// ระยะสูงสุดค้อนตีสิ่วได้
 
     [Header("References")]

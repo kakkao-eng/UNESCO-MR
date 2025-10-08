@@ -34,8 +34,6 @@ public class Fossil : MonoBehaviour
     [Header("Effects")]
     [SerializeField]
     private ParticleSystem damageEffect;
-    [SerializeField]
-    private AudioClip damageSound;
 
     private Renderer fossilRenderer;
     private Material originalMaterial;

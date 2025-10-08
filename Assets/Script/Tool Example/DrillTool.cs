@@ -5,59 +5,52 @@ using UnityEngine.XR;
 public class DrillTool : MonoBehaviour
 {
     [Header("Drill Settings")]
-    public float maxDrillDistance = 0.15f;    // ระยะเจาะสูงสุด
-    public float drillDamage = 20f;           // ดาเมจของสว่าน
-    public float drillRadius = 0.05f;         // รัศมีผลกระทบ
-    public float drillInterval = 0.1f;        // เวลาหน่วงระหว่างการเจาะ
+    public float maxDrillDistance = 0.15f;    
+    public float drillDamage = 10f;           
+    public float drillRadius = 0.05f;         
+    public float drillInterval = 0.1f;        
 
     [Header("References")]
-    public SoilGenerator soilGenerator;       // ตัวจัดการดิน
-    public Transform drillTip;                // ปลายสว่าน
-    public ParticleSystem drillParticles;     // เอฟเฟกต์เจาะ
+    public SoilGenerator soilGenerator;       
+    public Transform drillTip;                
+    public ParticleSystem drillParticles;     
+
+    [Header("Debris Settings")]
+    public GameObject dirtPrefab;          // Prefab ของเศษดิน
+    public int dirtSpawnCount = 5;         // จำนวนเศษดินต่อครั้งเจาะ
 
     [Header("Layer Settings")]
-    public LayerMask soilLayerMask;           // เลเยอร์ดิน
-    public LayerMask fossilLayerMask;         // เลเยอร์ฟอสซิล
+    public LayerMask soilLayerMask;           
+    public LayerMask fossilLayerMask;         
 
-    [Header("Debug Visualization")]
-    public bool showDrillRange = true;        // แสดง Debug Line
-    public Color drillRangeColor = Color.red;
-
-    private float nextDrillTime;              // เวลาเจาะครั้งถัดไป
-    private bool isDrilling;                  // กำลังเจาะหรือไม่
-    private InputDevice rightHand;            // ตัวแทนมือขวา VR
+    private float nextDrillTime;              
+    private bool isDrilling;                  
+    private InputDevice rightHand;            
 
     private void Start()
     {
-        // หา SoilGenerator ถ้ายังไม่ได้อ้างอิง
         if (soilGenerator == null)
             soilGenerator = FindObjectOfType<SoilGenerator>();
 
-        // ถ้าไม่มี drillTip ให้ใช้ Transform ของสว่านเอง
         if (drillTip == null)
             drillTip = transform;
 
-        // ปิด Particle ตอนเริ่ม
         if (drillParticles != null)
             drillParticles.Stop();
 
-        // กำหนดเลเยอร์สำหรับ Raycast
         soilLayerMask = 1 << LayerMask.NameToLayer("Soil");
         fossilLayerMask = 1 << LayerMask.NameToLayer("Fossil");
 
-        // ดึง Input ของมือขวา Pico
         rightHand = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
     }
 
     private void Update()
     {
-        // ตรวจสอบว่ากด Trigger มือขวาอยู่หรือไม่
         if (rightHand.TryGetFeatureValue(CommonUsages.triggerButton, out bool triggerPressed) && triggerPressed)
         {
             if (!isDrilling)
-                StartDrilling(); // เริ่มเจาะ
+                StartDrilling();
 
-            // เวลาผ่าน interval แล้วให้ PerformDrill
             if (Time.time >= nextDrillTime)
             {
                 PerformDrill();
@@ -66,7 +59,7 @@ public class DrillTool : MonoBehaviour
         }
         else if (isDrilling)
         {
-            StopDrilling(); // หยุดเจาะถ้าไม่ได้กด
+            StopDrilling();
         }
     }
 
@@ -74,42 +67,44 @@ public class DrillTool : MonoBehaviour
     {
         isDrilling = true;
         if (drillParticles != null)
-            drillParticles.Play(); // เล่น Particle
-        SoundManager.PlayLoop(SoundType.Drill); // เล่นเสียงสว่านวนลูป
+            drillParticles.Play();
+        SoundManager.PlayLoop(SoundType.Drill);
     }
 
     private void StopDrilling()
     {
         isDrilling = false;
         if (drillParticles != null)
-            drillParticles.Stop(); // หยุด Particle
-        SoundManager.StopSound(); // หยุดเสียง
+            drillParticles.Stop();
+        SoundManager.StopSound();
     }
 
     private void PerformDrill()
     {
         if (soilGenerator == null) return;
 
-        // ยิง Raycast จากปลายสว่านไปข้างหน้า
         if (Physics.Raycast(drillTip.position, drillTip.up, out RaycastHit hit, maxDrillDistance, soilLayerMask | fossilLayerMask))
         {
-            // ตรวจสอบชน Soil
+            // เจอ Soil
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Soil"))
             {
                 SoilBlock soilBlock = hit.collider.GetComponent<SoilBlock>();
                 if (soilBlock != null)
-                    soilBlock.TakeDamage(drillDamage); // ทำดาเมจ
-                soilGenerator.ClearBlocksInArea(hit.point, drillRadius); // ลบดินรอบ ๆ
+                    soilBlock.TakeDamage(drillDamage);
+
+                soilGenerator.ClearBlocksInArea(hit.point, drillRadius);
+
+                // 🔹 Spawn DirtChunk พร้อม Tag
+                SpawnDirt(hit.point);
             }
-            // ตรวจสอบชน Fossil
+            // เจอ Fossil
             else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Fossil"))
             {
                 Fossil fossil = hit.collider.GetComponent<Fossil>();
                 if (fossil != null)
-                    fossil.TakeDamage(drillDamage, ToolType.ElectricDrill); // ทำดาเมจฟอสซิล
+                    fossil.TakeDamage(drillDamage, ToolType.ElectricDrill);
             }
 
-            // อัปเดตตำแหน่ง Particle
             if (drillParticles != null)
             {
                 drillParticles.transform.position = hit.point;
@@ -118,34 +113,24 @@ public class DrillTool : MonoBehaviour
         }
     }
 
-    // วาด Gizmos สำหรับ Debug
-    private void OnDrawGizmos()
+    private void SpawnDirt(Vector3 position)
     {
-        if (!showDrillRange || drillTip == null) return;
+        if (dirtPrefab == null) return;
 
-        Gizmos.color = drillRangeColor;
-        Gizmos.DrawLine(drillTip.position, drillTip.position + drillTip.up * maxDrillDistance);
-
-        Matrix4x4 originalMatrix = Gizmos.matrix;
-        Vector3 endPoint = drillTip.position + drillTip.up * maxDrillDistance;
-        Quaternion rotation = Quaternion.LookRotation(drillTip.up);
-        Gizmos.matrix = Matrix4x4.TRS(endPoint, rotation, Vector3.one);
-        DrawGizmosCircle(Vector3.zero, drillRadius, 32);
-        Gizmos.matrix = originalMatrix;
-    }
-
-    // วาดวงกลมรัศมี drill
-    private void DrawGizmosCircle(Vector3 center, float radius, int segments)
-    {
-        float angleStep = 360f / segments;
-        Vector3 previousPoint = center + Vector3.right * radius;
-
-        for (int i = 0; i <= segments; i++)
+        for (int i = 0; i < dirtSpawnCount; i++)
         {
-            float angle = i * angleStep * Mathf.Deg2Rad;
-            Vector3 newPoint = center + new Vector3(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius, 0);
-            Gizmos.DrawLine(previousPoint, newPoint);
-            previousPoint = newPoint;
+            GameObject dirt = Instantiate(dirtPrefab, position, Random.rotation);
+            dirt.tag = "DirtChunk"; // ตั้ง Tag ให้ Brush ลบได้
+
+            if (dirt.TryGetComponent<Rigidbody>(out Rigidbody rb))
+            {
+                Vector3 randomDir = new Vector3(
+                    Random.Range(-1f, 1f),
+                    Random.Range(0.5f, 1.5f),
+                    Random.Range(-1f, 1f)
+                ).normalized;
+                rb.AddForce(randomDir * Random.Range(1f, 3f), ForceMode.Impulse);
+            }
         }
     }
 }

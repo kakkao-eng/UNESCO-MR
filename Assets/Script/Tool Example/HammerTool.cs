@@ -2,24 +2,25 @@ using Script.Tool_Example;
 using UnityEngine;
 using UnityEngine.XR;
 
-public class HammerTool_Adjustable : MonoBehaviour
+public class HammerTool : MonoBehaviour
 {
     [Header("Hammer Settings")]
-    public float maxHitDistance = 0.5f;   // ระยะตีสิ่ว
-    public float hitRadius = 0.15f;        // รัศมีทำลายดิน
-    public float hitForce = 20f;          // ดาเมจ
+    public float maxHitDistance = 0.5f;   // ระยะที่ค้อนสามารถตีถึงสิ่ว
+    public float hitRadius = 0.15f;       // รัศมีการกระทบ
+    public float hitForce = 5f;           // แรงตี
 
     [Header("Tip Offset")]
-    public Vector3 toolTipOffset = new Vector3(0, 0, 0.1f); // ปรับตำแหน่งปลายค้อน
-
-    [Header("Debug Visualization")]
-    public bool showGizmo = true;         // เปิด/ปิด Gizmos
+    public Vector3 toolTipOffset = new Vector3(0, 0, 0.1f); // จุดปลายค้อน
 
     [Header("References")]
     public Transform toolTip;              // จุดอ้างอิงปลายค้อน
 
-    private InputDevice rightHand;
-    private Vector3 lastHitPosition;
+    [Header("Debris Settings")]
+    public GameObject dirtPrefab;          // พรีแฟบเศษดิน
+    [Range(1, 3)]
+    public int dirtSpawnCount = 2;         // ✅ Spawn ดินให้น้อยลง (จาก 5 → 2)
+
+    private InputDevice rightHand;         // อ้างอิง Controller ด้านขวา
 
     private void Start()
     {
@@ -28,11 +29,7 @@ public class HammerTool_Adjustable : MonoBehaviour
 
     private void Update()
     {
-        UpdateHammer();
-    }
-
-    private void UpdateHammer()
-    {
+        // ตรวจว่ากด Trigger และมีสิ่วที่กำลัง Aim อยู่หรือไม่
         if (rightHand.TryGetFeatureValue(CommonUsages.triggerButton, out bool triggerPressed)
             && triggerPressed
             && ChiselTool.activeChisel != null)
@@ -48,11 +45,10 @@ public class HammerTool_Adjustable : MonoBehaviour
         var chisel = ChiselTool.activeChisel;
         if (chisel == null || !chisel.isAiming) return;
 
-        // คำนวณตำแหน่งปลายค้อน + Offset
+        // คำนวณตำแหน่งกระแทก
         Vector3 hitPosition = toolTip.position + toolTip.TransformDirection(toolTipOffset);
-        lastHitPosition = hitPosition;
 
-        // เล่นเอฟเฟกต์ตี
+        // เอฟเฟกต์ตอนตี
         if (chisel.hitEffect != null)
         {
             chisel.hitEffect.transform.position = chisel.aimPoint;
@@ -62,12 +58,12 @@ public class HammerTool_Adjustable : MonoBehaviour
         // เล่นเสียงค้อน
         SoundManager.PlaySound(SoundType.Hammer);
 
-        // SphereCast ทำดาเมจ
+        // ตรวจว่าสิ่งที่ตีเป็นดินหรือฟอสซิล
         RaycastHit[] hits = Physics.SphereCastAll(
-            hitPosition, 
-            hitRadius, 
-            chisel.toolTip.forward, 
-            0.2f, 
+            hitPosition,
+            hitRadius,
+            chisel.toolTip.forward,
+            0.2f,
             chisel.soilLayerMask | chisel.fossilLayerMask
         );
 
@@ -78,26 +74,33 @@ public class HammerTool_Adjustable : MonoBehaviour
             else if (hit.collider.TryGetComponent<Fossil>(out var fossil))
                 fossil.TakeDamage(hitForce, ToolType.Chisel);
         }
+
+        // ✅ Spawn เศษดิน (จำนวนน้อย)
+        SpawnDirt(hitPosition);
     }
 
-#if UNITY_EDITOR
-    private void OnDrawGizmos()
+    /// <summary>
+    /// สร้างเศษดินหลังจากตี
+    /// </summary>
+    private void SpawnDirt(Vector3 position)
     {
-        if (!showGizmo || toolTip == null) return;
+        if (dirtPrefab == null) return;
 
-        // จุดปลายค้อน + Offset
-        Vector3 drawPosition = toolTip.position + toolTip.TransformDirection(toolTipOffset);
-
-        // วาดรัศมีทำลาย
-        Gizmos.color = new Color(1, 0, 0, 0.25f);
-        Gizmos.DrawSphere(drawPosition, hitRadius);
-
-        // วาดเส้นเชื่อมค้อน → สิ่วถ้ามี
-        if (ChiselTool.activeChisel != null)
+        for (int i = 0; i < dirtSpawnCount; i++)
         {
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawLine(drawPosition, ChiselTool.activeChisel.toolTip.position);
+            GameObject dirt = Instantiate(dirtPrefab, position, Random.rotation);
+            dirt.tag = "DirtChunk"; // ให้ Brush ลบได้
+
+            // เพิ่มแรงสุ่มให้ดินกระเด้งออกไปเล็กน้อย
+            if (dirt.TryGetComponent<Rigidbody>(out Rigidbody rb))
+            {
+                Vector3 randomDir = new Vector3(
+                    Random.Range(-1f, 1f),
+                    Random.Range(0.5f, 1.5f),
+                    Random.Range(-1f, 1f)
+                ).normalized;
+                rb.AddForce(randomDir * Random.Range(1f, 3f), ForceMode.Impulse);
+            }
         }
     }
-#endif
 }

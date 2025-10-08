@@ -1,63 +1,56 @@
 using UnityEngine;
 using UnityEngine.XR;
 
-public class Brush : MonoBehaviour 
+public class Brush : MonoBehaviour
 {
     [Header("Brush Settings")]
-    public float brushRadius = 0.5f;                // รัศมีการทำงานของแปรง
-    public float brushStrength = 0.3f;              // ความแรงของแปรง
-    public Vector3 brushOffset = new Vector3(0, 0, 0.2f); // ปรับตำแหน่งรัศมีแปรงเองได้
+    public float brushRadius = 0.5f;                
+    public Vector3 brushOffset = new Vector3(0, 0, 0.2f); 
 
     [Header("Effects")]
-    public ParticleSystem dustEffect;                // เอฟเฟกต์ฝุ่นเวลาแปรงดิน
+    public ParticleSystem dustEffect;               
 
     [Header("Debug Visualization")]
-    public bool showBrushGizmo = true;               // เปิด/ปิดการแสดงรัศมีแปรง
+    public bool showBrushGizmo = true;             
 
-    private InputDevice rightHand;                   // ตัวแทนมือขวา Pico
-    private Vector3 lastBrushPoint;                  // จุดแปรงล่าสุด (ใช้วาด Gizmos)
+    private InputDevice rightHand;                  
+    private Vector3 lastBrushPoint;                 
 
     private void Start()
     {
-        // ดึง Input มือขวา
         rightHand = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
     }
 
     private void Update()
     {
-        // ตรวจสอบ Trigger มือขวา
         if (rightHand.TryGetFeatureValue(CommonUsages.triggerButton, out bool triggerPressed) && triggerPressed)
         {
-            // คำนวณตำแหน่งจริงของจุดศูนย์กลางแปรง
             Vector3 brushPoint = transform.position + transform.TransformDirection(brushOffset);
             UseBrush(brushPoint);
             lastBrushPoint = brushPoint;
         }
     }
 
-    public void UseBrush(Vector3 position)
+    private void UseBrush(Vector3 position)
     {
         Collider[] hits = Physics.OverlapSphere(position, brushRadius);
         bool hitSomething = false;
 
         foreach (var hit in hits)
         {
-            SoilBlock soil = hit.GetComponent<SoilBlock>();
-            if (soil != null && soil.soilType == SoilType.NearFossil)
+            if (hit.CompareTag("DirtChunk"))
             {
-                soil.Brush(); // ปัดดินใกล้ Fossil
+                Destroy(hit.gameObject);
                 hitSomething = true;
 
-                // สร้างเอฟเฟกต์ฝุ่น
                 if (dustEffect != null)
                 {
-                    var dust = Instantiate(dustEffect, soil.transform.position, Quaternion.identity);
+                    var dust = Instantiate(dustEffect, hit.transform.position, Quaternion.identity);
                     Destroy(dust.gameObject, 2f);
                 }
             }
         }
 
-        // เล่นเสียงถ้าเจอดิน
         if (hitSomething)
             SoundManager.PlaySound(SoundType.Brush);
     }
@@ -66,12 +59,10 @@ public class Brush : MonoBehaviour
     {
         if (!showBrushGizmo) return;
 
-        // จุดศูนย์กลางของรัศมีแปรง (ใช้ Offset)
         Vector3 drawPosition = Application.isPlaying && lastBrushPoint != Vector3.zero
             ? lastBrushPoint
             : transform.position + transform.TransformDirection(brushOffset);
 
-        // วาดรัศมีของแปรง
         Gizmos.color = new Color(1, 1, 0, 0.25f);
         Gizmos.DrawSphere(drawPosition, brushRadius);
     }

@@ -119,7 +119,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fossilId: 0
   ModelFossilID: 0
-  durability: 100
+  durability: 500
   currentState: 0
   damagedMaterial: {fileID: 0}
   cleanedMaterial: {fileID: 0}
