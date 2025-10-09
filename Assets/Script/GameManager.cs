@@ -20,7 +20,8 @@ public class GameManager : MonoBehaviour
     private bool isGameComplete = false;
 
     private static GameManager _instance;
-     private static bool isShuttingDown = false;
+    private static bool isShuttingDown = false;
+
     public static GameManager Instance
     {
         get
@@ -57,6 +58,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         UpdateUI();
+        SoundManager.PlaySound(SoundType.Background);
+        SoundManager.PlaySound(SoundType.V1Tutorial);
     }
     void OnDestroy()
     {

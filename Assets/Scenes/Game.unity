@@ -1838,8 +1838,6 @@ MonoBehaviour:
   maxDistance: 0.2
   toolTip: {fileID: 282559965}
   hitEffect: {fileID: 0}
-  dirtPrefab: {fileID: 2955123074680556241, guid: a8a5a6968d4a68b48ba9dfe61707c2e3, type: 3}
-  dirtSpawnCount: 5
   soilLayerMask:
     serializedVersion: 2
     m_Bits: 512
@@ -2042,7 +2040,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   brushRadius: 0.2
-  brushStrength: 0.3
   brushOffset: {x: 0, y: 0.25, z: 0}
   dustEffect: {fileID: 0}
   showBrushGizmo: 1
@@ -2706,19 +2703,7 @@ MonoBehaviour:
   gameCompleteUI: {fileID: 61824206}
   onGameComplete:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!4 &584893811
 Transform:
   m_ObjectHideFlags: 0
@@ -9100,29 +9085,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundlist:
   - name: Background
-    sounds: []
+    sounds:
+    - {fileID: 8300000, guid: 8a26889ceaa05433a9e9f268c0eb7861, type: 3}
   - name: ClickButton
     sounds:
-    - {fileID: 8300000, guid: d14b106713a74b448bcab90869f1706e, type: 3}
+    - {fileID: 8300000, guid: 70040c3428f27470da1de00b11047381, type: 3}
   - name: ClickBox
-    sounds: []
+    sounds:
+    - {fileID: 8300000, guid: 020ed740937c74b669546ee5e5fea067, type: 3}
   - name: WinGameSound
     sounds:
-    - {fileID: 8300000, guid: 6563b50a19a616142a1a693d7c0259cb, type: 3}
+    - {fileID: 8300000, guid: 3f6f7a3814f4b4a2a99ef69b4717eca7, type: 3}
   - name: LoseGameSound
-    sounds: []
+    sounds:
+    - {fileID: 8300000, guid: c1322ef72561e4674a7b11f24a2cefd0, type: 3}
   - name: WarningTime
-    sounds: []
+    sounds:
+    - {fileID: 8300000, guid: 5943ee89ed0f84b27a45b85d93129454, type: 3}
   - name: WarningHitFossil
-    sounds: []
+    sounds:
+    - {fileID: 8300000, guid: 5943ee89ed0f84b27a45b85d93129454, type: 3}
   - name: Hammer
-    sounds: []
+    sounds:
+    - {fileID: 8300000, guid: a02aca1f2c6eb445f8839994e3a31fb5, type: 3}
   - name: Drill
-    sounds: []
+    sounds:
+    - {fileID: 8300000, guid: 60008d3ca31b347879cf451b6dcbcc1c, type: 3}
   - name: Brush
-    sounds: []
+    sounds:
+    - {fileID: 8300000, guid: 3915c7c16ff81419ebd2024497a56392, type: 3}
   - name: Glue
-    sounds: []
+    sounds:
+    - {fileID: 8300000, guid: 97a09eea3c5df4e0ba197934732ee01a, type: 3}
+  - name: V1Tutorial
+    sounds:
+    - {fileID: 8300000, guid: a9423cc470ff741ffabcd998241d8b80, type: 3}
+  - name: V2tutorial
+    sounds:
+    - {fileID: 8300000, guid: 75bdc868b5064443f9bd29d770046834, type: 3}
 --- !u!82 &2026330998
 AudioSource:
   m_ObjectHideFlags: 0
@@ -9135,7 +9135,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

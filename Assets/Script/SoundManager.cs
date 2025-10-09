@@ -3,21 +3,23 @@
     using System.Collections.Generic;
     using System;
 
-    //Enum สำหรับระบุประเภทของเสียงที่มีในเกม
-    public enum SoundType
-    {
-        Background,       
-        ClickButton,      
-        ClickBox,        
-        WinGameSound,     
-        LoseGameSound,    
-        WarningTime,      
-        WarningHitFossil, 
-        Hammer,        
-        Drill,          
-        Brush,            
-        Glue              
-    }
+//Enum สำหรับระบุประเภทของเสียงที่มีในเกม
+public enum SoundType
+{
+    Background,
+    ClickButton,
+    ClickBox,
+    WinGameSound,
+    LoseGameSound,
+    WarningTime,
+    WarningHitFossil,
+    Hammer,
+    Drill,
+    Brush,
+    Glue,
+    V1Tutorial,
+    V2tutorial
+}
 
     [RequireComponent(typeof(AudioSource)), ExecuteInEditMode]
     public class SoundManager : MonoBehaviour
@@ -35,6 +37,11 @@
         {
             // กำหนด instance ให้ตัวนี้เอง (singleton)
             instance = this;
+            // ดึง AudioSource ตอน Awake เลย
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
         }
 
         private void Start()

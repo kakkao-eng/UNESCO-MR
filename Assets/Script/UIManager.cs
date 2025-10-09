@@ -49,7 +49,6 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        SoundManager.PlaySound(SoundType.Background);
         // เริ่มต้นให้แสดงเฉพาะ ToolBox
         toolPanel.SetActive(false);
         timerText.text = FormatTime(gameTime);
@@ -93,6 +92,7 @@ public class UIManager : MonoBehaviour
         FivetoolObject.SetActive(true);
         timeLeft = gameTime;
         gameRunning = true;
+        SoundManager.PlaySound(SoundType.V2tutorial);
 
         // สร้างฟอสซิลทันทีเมื่อเริ่มเกม
         if (fossilSpawner != null)
