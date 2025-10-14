@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.XR;
 
-public class GlueUnlimited : MonoBehaviour 
+public class Glue : MonoBehaviour 
 {
     [Header("Glue Settings")]
     public float glueRadius = 0.3f;             // รัศมีของกาว

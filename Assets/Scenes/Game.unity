@@ -1392,7 +1392,7 @@ MonoBehaviour:
   soilGenerator: {fileID: 1050153978}
   drillTip: {fileID: 701051617}
   drillParticles: {fileID: 0}
-  dirtPrefab: {fileID: 2955123074680556241, guid: a8a5a6968d4a68b48ba9dfe61707c2e3, type: 3}
+  dirtPrefab: {fileID: 8933638655401896267, guid: c2450dfc8bcb14c4581fa393bc83be42, type: 3}
   dirtSpawnCount: 5
   soilLayerMask:
     serializedVersion: 2
@@ -7649,7 +7649,7 @@ MonoBehaviour:
   hitForce: 20
   toolTipOffset: {x: 0, y: 0, z: 0.22}
   toolTip: {fileID: 547975455}
-  dirtPrefab: {fileID: 2955123074680556241, guid: a8a5a6968d4a68b48ba9dfe61707c2e3, type: 3}
+  dirtPrefab: {fileID: 8933638655401896267, guid: c2450dfc8bcb14c4581fa393bc83be42, type: 3}
   dirtSpawnCount: 3
 --- !u!1 &1659703805
 GameObject:
