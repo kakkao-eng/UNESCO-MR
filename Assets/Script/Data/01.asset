@@ -9,11 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d84923cab4d03452a8a3b80e3386b9b4, type: 3}
-  m_Name: PXR_PicoDebuggerSO
+  m_Script: {fileID: 11500000, guid: 9605f49e1638343918fdb84201b00aee, type: 3}
+  m_Name: 01
   m_EditorClassIdentifier: 
-  isOpen: 0
-  debuggerLauncherButton: 3
-  startPosition: 0
-  maxInfoCount: 0
-  rulerClearButton: 3
+  fossilNameTH: Test
+  fossilNameEN: Test
+  fossilImage: {fileID: 0}
+  fossilDescription: 'hi hi hi hi hi
+
+    ffff
+
+    ffff'
+  fossilID: 0
