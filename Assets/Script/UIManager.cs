@@ -81,6 +81,7 @@ public class UIManager : MonoBehaviour
         startButton.gameObject.SetActive(true); // แสดงปุ่ม Start
         toolBoxObject.SetActive(false);      // ซ่อน ToolBox ออกจากฉาก
         SoundManager.PlaySound(SoundType.ClickBox);
+        SoundManager.PlaySound(SoundType.V2tutorial);
         Debug.Log("ToolBox opened - Start button shown");
     }
 
@@ -92,7 +93,6 @@ public class UIManager : MonoBehaviour
         FivetoolObject.SetActive(true);
         timeLeft = gameTime;
         gameRunning = true;
-        SoundManager.PlaySound(SoundType.V2tutorial);
 
         // สร้างฟอสซิลทันทีเมื่อเริ่มเกม
         if (fossilSpawner != null)
