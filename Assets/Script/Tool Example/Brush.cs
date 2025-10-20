@@ -5,10 +5,14 @@ public class Brush : MonoBehaviour
 {
     [Header("Brush Settings")]
     public float brushRadius = 0.5f;                
-    public Vector3 brushOffset = new Vector3(0, 0, 0.2f); 
+    public Vector3 brushOffset = new Vector3(0, 0, 0.2f);
 
     [Header("Effects")]
     public ParticleSystem dustEffect;               
+
+    [Header("Sound Settings")]
+    public float soundCooldown = 0.3f; // หน่วงเวลาเสียง (วินาที)
+    private float nextSoundTime = 0f;
 
     [Header("Debug Visualization")]
     public bool showBrushGizmo = true;             
@@ -51,8 +55,12 @@ public class Brush : MonoBehaviour
             }
         }
 
-        if (hitSomething)
+        // ✅ เล่นเสียงอย่างสมูท (มี cooldown)
+        if (hitSomething && Time.time >= nextSoundTime)
+        {
             SoundManager.PlaySound(SoundType.Brush);
+            nextSoundTime = Time.time + soundCooldown;
+        }
     }
 
     private void OnDrawGizmos()

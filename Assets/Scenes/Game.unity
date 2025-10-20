@@ -2182,6 +2182,7 @@ MonoBehaviour:
   brushRadius: 0.2
   brushOffset: {x: 0, y: 0.25, z: 0}
   dustEffect: {fileID: 0}
+  soundCooldown: 0.3
   showBrushGizmo: 1
 --- !u!1 &407411182
 GameObject:
@@ -9280,7 +9281,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 5943ee89ed0f84b27a45b85d93129454, type: 3}
   - name: WarningHitFossil
     sounds:
-    - {fileID: 8300000, guid: 5943ee89ed0f84b27a45b85d93129454, type: 3}
+    - {fileID: 8300000, guid: 8fa04073983154aa1b7150f83778dbed, type: 3}
   - name: Hammer
     sounds:
     - {fileID: 8300000, guid: a02aca1f2c6eb445f8839994e3a31fb5, type: 3}

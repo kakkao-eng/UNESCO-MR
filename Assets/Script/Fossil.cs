@@ -7,48 +7,37 @@ using Script.Tool_Example;
 public class Fossil : MonoBehaviour
 {
     [Header("Fossil Properties")]
-    [SerializeField]
-    [Tooltip("ID ของฟอสซิลใน FossilData")]
+    [SerializeField, Tooltip("ID ของฟอสซิลใน FossilData")]
     private int fossilId;
 
-    [SerializeField]
-    [Tooltip("ID Model ของฟอสซิลใน FossilData")]
+    [SerializeField, Tooltip("ID Model ของฟอสซิลใน FossilData")]
     private int ModelFossilID;
 
-    [SerializeField]
-    [Tooltip("ความทนทานของฟอสซิล")]
+    [SerializeField, Tooltip("ความทนทานของฟอสซิล")]
     private float durability = 100f;
 
-    [SerializeField]
-    [Tooltip("สถานะของฟอสซิล")]
+    [SerializeField, Tooltip("สถานะของฟอสซิล")]
     private FossilState currentState = FossilState.Buried;
 
     [Header("Visual Feedback")]
-    [SerializeField]
-    private Material damagedMaterial;
-    [SerializeField]
-    private Material cleanedMaterial;
-    [SerializeField]
-    private Material repairedMaterial;
+    [SerializeField] private Material damagedMaterial;
+    [SerializeField] private Material cleanedMaterial;
+    [SerializeField] private Material repairedMaterial;
 
     [Header("Effects")]
-    [SerializeField]
-    private ParticleSystem damageEffect;
+    [SerializeField] private ParticleSystem damageEffect;
 
     private Renderer fossilRenderer;
     private Material originalMaterial;
     private float currentDurability;
 
-    [SerializeField]
-    private float fadeOutDuration = 1f; // ระยะเวลาในการหายไป
+    [SerializeField] private float fadeOutDuration = 1f; // ระยะเวลาในการหายไป
 
     private bool isFading = false;
 
     [Header("Fall Settings")]
-    [SerializeField]
-    private float requiredClearedBlocks = 4; // จำนวนบล็อกขั้นต่ำที่ต้องถูกขุด
-    [SerializeField]
-    private float fallSpeed = 5f; // ความเร็วในการตก
+    [SerializeField] private float requiredClearedBlocks = 4; // จำนวนบล็อกขั้นต่ำที่ต้องถูกขุด
+    [SerializeField] private float fallSpeed = 5f; // ความเร็วในการตก
     private int clearedBlocksCount = 0;
     private bool isFalling = false;
 
@@ -84,15 +73,22 @@ public class Fossil : MonoBehaviour
         float actualDamage = CalculateDamage(damage, toolType);
         currentDurability -= actualDamage;
 
-        // เล่นเอฟเฟกต์เมื่อได้รับความเสียหาย
+        // 🔹 ปรับตำแหน่งของ SoundManager.PlaySound ให้อยู่ใน scope เดียวกับ effect
         if (damageEffect != null)
+        {
             damageEffect.Play();
-            SoundManager.PlaySound(SoundType.WarningHitFossil);
+        }
 
+        // 🔹 เล่นเสียงเตือนเมื่อฟอสซิลโดนตี
+        SoundManager.PlaySound(SoundType.WarningHitFossil);
+
+        // 🔸 ถ้าฟอสซิลพัง
         if (currentDurability <= 0)
         {
             SetState(FossilState.Damaged);
             StartCoroutine(FadeOutAndDestroy());
+            
+            // แจ้ง UIManager ว่าภารกิจล้มเหลว
             UIManager uiManager = FindObjectOfType<UIManager>();
             if (uiManager != null)
             {
@@ -158,7 +154,7 @@ public class Fossil : MonoBehaviour
                 fossilRenderer.material = originalMaterial;
                 break;
             case FossilState.Excavated:
-                fossilRenderer.material = cleanedMaterial; // หรือใช้ material อื่นตามต้องการ
+                fossilRenderer.material = cleanedMaterial;
                 break;
             case FossilState.Damaged:
                 fossilRenderer.material = damagedMaterial;
@@ -202,8 +198,7 @@ public class Fossil : MonoBehaviour
             yield return null;
         }
 
-        // ทำลาย GameObject
-        Destroy(gameObject);
+        Destroy(gameObject); // ทำลาย GameObject
     }
 
     public void CheckSurroundingBlocks()
@@ -277,14 +272,12 @@ public class Fossil : MonoBehaviour
             Destroy(rb);
         }
 
+        // แจ้ง UIManager ว่าฟอสซิลขุดเสร็จ
         UIManager ui = FindObjectOfType<UIManager>();
         if (ui != null)
         {
             ui.CompleteFossil(this);
         }
-
-        // จบเกมทันทีเมื่อฟอสซิลตกลงมาและหยุดนิ่ง
-        //GameManager.Instance.CompleteGame();
     }
 
     // Getter methods

@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         UpdateUI();
-        SoundManager.PlaySound(SoundType.Background);
+        SoundManager.PlayLoop(SoundType.Background);
         SoundManager.PlaySound(SoundType.V1Tutorial);
     }
     void OnDestroy()

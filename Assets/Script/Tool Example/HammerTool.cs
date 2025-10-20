@@ -22,6 +22,10 @@ public class HammerTool : MonoBehaviour
 
     private InputDevice rightHand;         // อ้างอิง Controller ด้านขวา
 
+    // 🔹 เพิ่มระบบ cooldown ป้องกันเสียงค้อนถี่เกินไป
+    private float nextHitTime = 0f;
+    private float hitCooldown = 0.25f;     // หน่วงเวลาเสียงและตี 0.25 วินาที
+
     private void Start()
     {
         rightHand = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
@@ -34,9 +38,13 @@ public class HammerTool : MonoBehaviour
             && triggerPressed
             && ChiselTool.activeChisel != null)
         {
+            // ✅ เช็คระยะระหว่างค้อนกับสิ่ว
             float distanceToChisel = Vector3.Distance(transform.position, ChiselTool.activeChisel.toolTip.position);
-            if (distanceToChisel <= maxHitDistance)
+            if (distanceToChisel <= maxHitDistance && Time.time >= nextHitTime)
+            {
                 HitWithHammer();
+                nextHitTime = Time.time + hitCooldown; // 🔸 หน่วงเวลาไม่ให้ตี/เสียงซ้ำถี่
+            }
         }
     }
 
@@ -48,14 +56,14 @@ public class HammerTool : MonoBehaviour
         // คำนวณตำแหน่งกระแทก
         Vector3 hitPosition = toolTip.position + toolTip.TransformDirection(toolTipOffset);
 
-        // เอฟเฟกต์ตอนตี
+        // เอฟเฟกต์ตอนตี (ฝุ่น/ประกาย)
         if (chisel.hitEffect != null)
         {
             chisel.hitEffect.transform.position = chisel.aimPoint;
             chisel.hitEffect.Play();
         }
 
-        // เล่นเสียงค้อน
+        // ✅ เล่นเสียงค้อน (ปรับให้สมูทและไม่ overlap)
         SoundManager.PlaySound(SoundType.Hammer);
 
         // ตรวจว่าสิ่งที่ตีเป็นดินหรือฟอสซิล
@@ -70,9 +78,13 @@ public class HammerTool : MonoBehaviour
         foreach (var hit in hits)
         {
             if (hit.collider.TryGetComponent<SoilBlock>(out var soilBlock))
+            {
                 soilBlock.TakeDamage(hitForce);
+            }
             else if (hit.collider.TryGetComponent<Fossil>(out var fossil))
+            {
                 fossil.TakeDamage(hitForce, ToolType.Chisel);
+            }
         }
 
         // ✅ Spawn เศษดิน (จำนวนน้อย)
