@@ -10,14 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9605f49e1638343918fdb84201b00aee, type: 3}
-  m_Name: 01
+  m_Name: "08_\u0E0A\u0E49\u0E32\u0E07\u0E40\u0E2D\u0E25\u0E34\u0E1F\u0E32\u0E2A"
   m_EditorClassIdentifier: 
-  fossilNameTH: Test
-  fossilNameEN: Test
+  fossilNameTH: "\u0E0A\u0E49\u0E32\u0E07\u0E40\u0E2D\u0E25\u0E34\u0E1F\u0E32\u0E2A"
+  fossilNameEN: 
   fossilImage: {fileID: 0}
-  fossilDescription: 'hi hi hi hi hi
-
-    ffff
-
-    ffff'
-  fossilID: 0
+  fossilDescription: 
+  fossilID: 

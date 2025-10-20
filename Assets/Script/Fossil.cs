@@ -52,6 +52,10 @@ public class Fossil : MonoBehaviour
     private int clearedBlocksCount = 0;
     private bool isFalling = false;
 
+    [Header("ข้อมูลฟอสซิล")]
+    public string fossilID; // เช่น "F01", "F02"
+    public string GetFossilUniqueID() => fossilID;
+
     // สถานะของฟอสซิล
     public enum FossilState
     {

@@ -125,7 +125,7 @@ MonoBehaviour:
   cleanedMaterial: {fileID: 0}
   repairedMaterial: {fileID: 0}
   damageEffect: {fileID: 0}
-  damageSound: {fileID: 0}
   fadeOutDuration: 1
   requiredClearedBlocks: 4
   fallSpeed: 5
+  fossilID: 00

@@ -1,54 +1,36 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
-/// <summary>
-/// จัดการข้อมูลฟอสซิลทั้งหมด และแสดงตอนจบเกม
-/// </summary>
 public class FossilInfoManager : MonoBehaviour
 {
-    [Header("ฐานข้อมูลฟอสซิลทั้งหมด")]
-    public FossilInfo[] fossilDatabase; // ใส่ข้อมูลทั้งหมดใน Inspector
+    [Header("Fossil Database (ScriptableObjects)")]
+    public FossilInfo[] fossilDatabase; // เก็บข้อมูลฟอสซิลทั้งหมด
 
-    [Header("UI สำหรับแสดงข้อมูลตอนจบเกม")]
+    [Header("UI Elements")]
     public Image fossilImageUI;
-    public TMP_Text fossilNameText;
-    public TMP_Text fossilDescriptionText;
-
-    [Header("หน้าต่างแสดงข้อมูล")]
-    public GameObject infoPanel;
+    public TMP_Text fossilNameTHUI;
+    public TMP_Text fossilNameENUI;
+    public TMP_Text fossilDescriptionUI;
 
     /// <summary>
-    /// เรียกข้อมูลฟอสซิลตามรหัส เช่น "F01"
+    /// แสดงข้อมูลฟอสซิลบน UI โดยใช้ fossilID
     /// </summary>
     public void ShowFossilInfo(string fossilID)
     {
-        FossilInfo info = GetFossilInfoByID(fossilID);
+        var info = fossilDatabase.FirstOrDefault(f => f.fossilID == fossilID);
 
-        if (info == null)
+        if (info != null)
         {
-            Debug.LogWarning($"❌ Fossil ID '{fossilID}' not found in database!");
-            return;
+            fossilNameTHUI.text = info.fossilNameTH;
+            fossilNameENUI.text = info.fossilNameEN;
+            fossilDescriptionUI.text = info.fossilDescription;
+            fossilImageUI.sprite = info.fossilImage;
         }
-
-        // แสดงข้อมูลบน UI
-        if (fossilImageUI != null) fossilImageUI.sprite = info.fossilImage;
-        if (fossilNameText != null) fossilNameText.text = $"{info.fossilNameTH} ({info.fossilNameEN})";
-        if (fossilDescriptionText != null) fossilDescriptionText.text = info.fossilDescription;
-
-        if (infoPanel != null) infoPanel.SetActive(true);
-    }
-
-    /// <summary>
-    /// คืนค่า ScriptableObject ที่ตรงกับ ID
-    /// </summary>
-    private FossilInfo GetFossilInfoByID(string fossilID)
-    {
-        foreach (var fossil in fossilDatabase)
+        else
         {
-            if (fossil.fossilID == fossilID)
-                return fossil;
+            Debug.LogWarning($"ไม่พบข้อมูลฟอสซิลที่มีรหัส {fossilID}");
         }
-        return null;
     }
 }

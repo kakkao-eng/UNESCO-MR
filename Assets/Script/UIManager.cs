@@ -168,10 +168,15 @@ public class UIManager : MonoBehaviour
         
         // ✅ แสดงโมเดลจาก Fossil ที่ส่งมา
         if (fossil != null)
-        {
-            ShowFossilModel(fossil.GetModelFossilId());
-            Debug.Log($"ShowFossilModel: Spawn model ID {fossil.GetModelFossilId()}");
+    {
+        ShowFossilModel(fossil.GetModelFossilId());
+
+        // ✅ ดึงข้อมูลฟอสซิลขึ้นหน้าจอ
+        var infoManager = FindObjectOfType<FossilInfoManager>();
+        if (infoManager != null)
+            infoManager.ShowFossilInfo(fossil.GetFossilUniqueID());
         }
+
     }
 
     /// <summary>
