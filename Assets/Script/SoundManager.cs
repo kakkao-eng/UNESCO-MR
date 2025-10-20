@@ -18,7 +18,8 @@ public enum SoundType
     Brush,
     Glue,
     V1Tutorial,
-    V2tutorial
+    V2tutorial,
+    V3GameEnd
 }
 
     [RequireComponent(typeof(AudioSource)), ExecuteInEditMode]

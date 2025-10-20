@@ -2941,16 +2941,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fossilDatabase:
   - {fileID: 11400000, guid: ead41b4075ebe4fb0aff5b57315725c7, type: 2}
-  - {fileID: 11400000, guid: ead41b4075ebe4fb0aff5b57315725c7, type: 2}
-  - {fileID: 11400000, guid: ead41b4075ebe4fb0aff5b57315725c7, type: 2}
-  - {fileID: 11400000, guid: ead41b4075ebe4fb0aff5b57315725c7, type: 2}
-  - {fileID: 11400000, guid: ead41b4075ebe4fb0aff5b57315725c7, type: 2}
-  - {fileID: 11400000, guid: ead41b4075ebe4fb0aff5b57315725c7, type: 2}
-  - {fileID: 11400000, guid: ead41b4075ebe4fb0aff5b57315725c7, type: 2}
-  - {fileID: 11400000, guid: ead41b4075ebe4fb0aff5b57315725c7, type: 2}
-  - {fileID: 11400000, guid: ead41b4075ebe4fb0aff5b57315725c7, type: 2}
-  - {fileID: 11400000, guid: ead41b4075ebe4fb0aff5b57315725c7, type: 2}
-  - {fileID: 11400000, guid: ead41b4075ebe4fb0aff5b57315725c7, type: 2}
+  - {fileID: 11400000, guid: dbd62b12eda3444769e076b7f4a4e101, type: 2}
+  - {fileID: 11400000, guid: 6cb218e0e2c93437ebb81066daa13b70, type: 2}
+  - {fileID: 11400000, guid: c0a885f4deaf84a9f8548cf86c7f08ac, type: 2}
+  - {fileID: 11400000, guid: 3653a46ef4e364d29aa82a69dc0021eb, type: 2}
+  - {fileID: 11400000, guid: 784efc08f035e4d7294d185d54b5845a, type: 2}
+  - {fileID: 11400000, guid: 2d4fc1188ed0742d782fdcd29b95dd4a, type: 2}
+  - {fileID: 11400000, guid: a2b517b3c4385494094e7d0e236fe2df, type: 2}
+  - {fileID: 11400000, guid: ecb41468c19774cb3b86aee6a67f339d, type: 2}
   fossilImageUI: {fileID: 790713949}
   fossilNameTHUI: {fileID: 634414524}
   fossilNameENUI: {fileID: 156265281}
@@ -9301,6 +9299,9 @@ MonoBehaviour:
   - name: V2tutorial
     sounds:
     - {fileID: 8300000, guid: 75bdc868b5064443f9bd29d770046834, type: 3}
+  - name: V3GameEnd
+    sounds:
+    - {fileID: 8300000, guid: 2a51d609604e744a09bbf59a0dc25b35, type: 3}
 --- !u!82 &2026330998
 AudioSource:
   m_ObjectHideFlags: 0

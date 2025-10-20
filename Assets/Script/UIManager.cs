@@ -156,6 +156,7 @@ public class UIManager : MonoBehaviour
 
         ShowStarScore();
         SoundManager.PlaySound(SoundType.WinGameSound);
+        SoundManager.PlaySound(SoundType.V3GameEnd);
 
         if (warningCoroutine != null)
         {
@@ -237,6 +238,7 @@ public class UIManager : MonoBehaviour
         toolPanel.SetActive(false);
         Debug.Log("Mission Fail!");
         SoundManager.PlaySound(SoundType.LoseGameSound);
+        SoundManager.PlaySound(SoundType.V3GameEnd);
     }
 
     public void RestartGame()
