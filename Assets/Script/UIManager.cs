@@ -130,6 +130,7 @@ public class UIManager : MonoBehaviour
             {
                 ShowWarningEffect();
                 warningCoroutine = StartCoroutine(BlinkWarningOverlay());
+                SoundManager.PlaySound(SoundType.WarningTime);
             }
             // หมดเวลาแล้วยังไม่เสร็จ
             if (timeLeft <= 0 && !fossilCompleted)
@@ -216,7 +217,6 @@ public class UIManager : MonoBehaviour
             // กระพริบ alpha 0 ↔ 0.4
             c.a = (c.a < 0.2f) ? 0.4f : 0f;
             warningOverlay.color = c;
-            SoundManager.PlaySound(SoundType.WarningTime);
 
             yield return new WaitForSeconds(0.5f);
         }
