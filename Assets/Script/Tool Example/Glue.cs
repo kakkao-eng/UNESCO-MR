@@ -93,7 +93,8 @@ public class Glue : MonoBehaviour
 
     private void StopGlueSound()
     {
-        SoundManager.StopSound();
+        // แก้ไข: ใช้ StopLoopSound เพื่อหยุดเสียงกาวที่เล่นวนลูป
+        SoundManager.StopLoopSound(); 
     }
 
     public void OnGrabbed()

@@ -99,7 +99,8 @@ public class Brush : MonoBehaviour
 
         if (soundPlaying)
         {
-            SoundManager.StopSound();
+            // แก้ไข: ใช้ StopLoopSound เพื่อหยุดเสียงแปรงที่เล่นวนลูป
+            SoundManager.StopLoopSound(); 
             soundPlaying = false;
         }
     }

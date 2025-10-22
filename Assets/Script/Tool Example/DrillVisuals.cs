@@ -20,6 +20,7 @@ public class DrillVisuals : MonoBehaviour
         if (drillTool != null && IsDrilling())
         {
             transform.Rotate(rotationAxis, rotationSpeed * Time.deltaTime, Space.Self);
+            SoundManager.PlayLoop(SoundType.Drill);
         }
     }
 

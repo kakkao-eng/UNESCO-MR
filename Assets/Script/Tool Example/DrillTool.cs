@@ -27,6 +27,7 @@ public class DrillTool : MonoBehaviour
     private bool isDrilling;
     private bool isGrabbed = false;
     private InputDevice rightHand;
+
     private bool soundPlaying = false;
 
     private void Start()
@@ -52,7 +53,6 @@ public class DrillTool : MonoBehaviour
         if (!isGrabbed)
         {
             if (isDrilling) StopDrilling();
-            StopDrillSound();
             return;
         }
 
@@ -96,6 +96,7 @@ public class DrillTool : MonoBehaviour
 
     private void PlayDrillSound()
     {
+        // ตรวจสอบก่อนว่าไม่ได้เล่นอยู่
         if (!soundPlaying)
         {
             SoundManager.PlayLoop(SoundType.Drill);
@@ -105,9 +106,10 @@ public class DrillTool : MonoBehaviour
 
     private void StopDrillSound()
     {
-        if (soundPlaying)
+        // ตรวจสอบว่าเสียงสว่านกำลังเล่นหรือไม่ ก่อนสั่งหยุด
+        if (soundPlaying) // ใช้ soundPlaying ที่เราควบคุมเอง
         {
-            SoundManager.StopSound();
+            SoundManager.StopLoopSound(); // สั่งหยุด AudioSource ที่ใช้ Loop
             soundPlaying = false;
         }
     }
