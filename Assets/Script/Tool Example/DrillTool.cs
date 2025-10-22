@@ -5,29 +5,29 @@ using UnityEngine.XR;
 public class DrillTool : MonoBehaviour
 {
     [Header("Drill Settings")]
-    public float maxDrillDistance = 0.15f;    
-    public float drillDamage = 10f;           
-    public float drillRadius = 0.05f;         
-    public float drillInterval = 0.1f;        
+    public float maxDrillDistance = 0.15f;
+    public float drillDamage = 10f;
+    public float drillRadius = 0.05f;
+    public float drillInterval = 0.1f;
 
     [Header("References")]
-    public SoilGenerator soilGenerator;       
-    public Transform drillTip;                
-    public ParticleSystem drillParticles;     
+    public SoilGenerator soilGenerator;
+    public Transform drillTip;
+    public ParticleSystem drillParticles;
 
     [Header("Debris Settings")]
-    public GameObject dirtPrefab;          
-    public int dirtSpawnCount = 5;         
+    public GameObject dirtPrefab;
+    public int dirtSpawnCount = 5;
 
     [Header("Layer Settings")]
-    public LayerMask soilLayerMask;           
-    public LayerMask fossilLayerMask;         
+    public LayerMask soilLayerMask;
+    public LayerMask fossilLayerMask;
 
-    private float nextDrillTime;              
-    private bool isDrilling;                  
-    private bool isGrabbed = false;           
-    private InputDevice rightHand;            
-    private bool soundPlaying = false;        // ✅ ตัวเช็กสถานะเสียง
+    private float nextDrillTime;
+    private bool isDrilling;
+    private bool isGrabbed = false;
+    private InputDevice rightHand;
+    private bool soundPlaying = false;
 
     private void Start()
     {
@@ -48,7 +48,7 @@ public class DrillTool : MonoBehaviour
 
     private void Update()
     {
-        // ยังไม่ได้ถือเครื่องมือ → ไม่ให้ทำงาน
+        // ต้องถืออยู่ถึงจะทำงาน
         if (!isGrabbed)
         {
             if (isDrilling) StopDrilling();
@@ -59,14 +59,12 @@ public class DrillTool : MonoBehaviour
         // ตรวจจับการกด Trigger
         if (rightHand.TryGetFeatureValue(CommonUsages.triggerButton, out bool triggerPressed) && triggerPressed)
         {
-            // เริ่มเจาะ
             if (!isDrilling)
             {
                 StartDrilling();
                 PlayDrillSound();
             }
 
-            // สั่งให้เจาะในระยะเวลาที่กำหนด
             if (Time.time >= nextDrillTime)
             {
                 PerformDrill();
@@ -75,7 +73,6 @@ public class DrillTool : MonoBehaviour
         }
         else
         {
-            // ปล่อย Trigger → หยุดเจาะและหยุดเสียง
             if (isDrilling)
                 StopDrilling();
 
@@ -97,7 +94,6 @@ public class DrillTool : MonoBehaviour
             drillParticles.Stop();
     }
 
-    // ✅ ฟังก์ชันเล่นเสียง (เฉพาะตอนเริ่มเจาะ)
     private void PlayDrillSound()
     {
         if (!soundPlaying)
@@ -107,7 +103,6 @@ public class DrillTool : MonoBehaviour
         }
     }
 
-    // ✅ ฟังก์ชันหยุดเสียง (ตอนปล่อย Trigger)
     private void StopDrillSound()
     {
         if (soundPlaying)
@@ -117,30 +112,36 @@ public class DrillTool : MonoBehaviour
         }
     }
 
+    // ✅ ฟังก์ชันหลัก — ขุดเฉพาะดินจริง / ฟอสซิล (ไม่ขุด DirtChunk)
     private void PerformDrill()
     {
         if (soilGenerator == null) return;
 
         if (Physics.Raycast(drillTip.position, drillTip.up, out RaycastHit hit, maxDrillDistance, soilLayerMask | fossilLayerMask))
         {
-            // เจอ Soil
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Soil"))
+            GameObject hitObject = hit.collider.gameObject;
+
+            // ❌ ถ้าเจอวัตถุที่เป็นเศษดิน (DirtChunk) → ไม่ต้องทำอะไร
+            if (hitObject.CompareTag("DirtChunk"))
+                return;
+
+            // ✅ เจอ Soil block
+            if (hitObject.layer == LayerMask.NameToLayer("Soil"))
             {
-                SoilBlock soilBlock = hit.collider.GetComponent<SoilBlock>();
-                if (soilBlock != null)
+                if (hitObject.TryGetComponent(out SoilBlock soilBlock))
                     soilBlock.TakeDamage(drillDamage);
 
                 soilGenerator.ClearBlocksInArea(hit.point, drillRadius);
                 SpawnDirt(hit.point);
             }
-            // เจอ Fossil
-            else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Fossil"))
+            // ✅ เจอ Fossil
+            else if (hitObject.layer == LayerMask.NameToLayer("Fossil"))
             {
-                Fossil fossil = hit.collider.GetComponent<Fossil>();
-                if (fossil != null)
+                if (hitObject.TryGetComponent(out Fossil fossil))
                     fossil.TakeDamage(drillDamage, ToolType.ElectricDrill);
             }
 
+            // ปรับตำแหน่งฝุ่น
             if (drillParticles != null)
             {
                 drillParticles.transform.position = hit.point;
@@ -156,7 +157,7 @@ public class DrillTool : MonoBehaviour
         for (int i = 0; i < dirtSpawnCount; i++)
         {
             GameObject dirt = Instantiate(dirtPrefab, position, Random.rotation);
-            dirt.tag = "DirtChunk";
+            dirt.tag = "DirtChunk"; // ตั้ง Tag ให้ Brush ลบได้
 
             if (dirt.TryGetComponent<Rigidbody>(out Rigidbody rb))
             {

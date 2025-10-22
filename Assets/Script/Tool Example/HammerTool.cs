@@ -5,26 +5,27 @@ using UnityEngine.XR;
 public class HammerTool : MonoBehaviour
 {
     [Header("Hammer Settings")]
-    public float maxHitDistance = 0.5f;   // ระยะที่ค้อนสามารถตีถึงสิ่ว
-    public float hitRadius = 0.15f;       // รัศมีการกระทบ
-    public float hitForce = 5f;           // แรงตี
+    public float maxHitDistance = 0.5f;
+    public float hitRadius = 0.15f;
+    public float hitForce = 5f;
 
     [Header("Tip Offset")]
-    public Vector3 toolTipOffset = new Vector3(0, 0, 0.1f); // จุดปลายค้อน
+    public Vector3 toolTipOffset = new Vector3(0, 0, 0.1f);
 
     [Header("References")]
-    public Transform toolTip;              // จุดอ้างอิงปลายค้อน
+    public Transform toolTip;
 
     [Header("Debris Settings")]
-    public GameObject dirtPrefab;          // พรีแฟบเศษดิน
+    public GameObject dirtPrefab;
     [Range(1, 3)]
-    public int dirtSpawnCount = 2;         // ✅ Spawn ดินให้น้อยลง (จาก 5 → 2)
+    public int dirtSpawnCount = 2;
 
-    private InputDevice rightHand;         // อ้างอิง Controller ด้านขวา
+    private InputDevice rightHand;
+    private bool isGrabbed = false;   // ✅ ต้องถือก่อนถึงใช้ได้
 
-    // 🔹 เพิ่มระบบ cooldown ป้องกันเสียงค้อนถี่เกินไป
+    // Cooldown
     private float nextHitTime = 0f;
-    private float hitCooldown = 0.25f;     // หน่วงเวลาเสียงและตี 0.25 วินาที
+    private float hitCooldown = 0.25f;
 
     private void Start()
     {
@@ -33,17 +34,20 @@ public class HammerTool : MonoBehaviour
 
     private void Update()
     {
-        // ตรวจว่ากด Trigger และมีสิ่วที่กำลัง Aim อยู่หรือไม่
+        // ❌ ถ้าไม่ได้ถือค้อน → ไม่ให้ทำงาน
+        if (!isGrabbed)
+            return;
+
+        // ✅ ตรวจว่ากด Trigger และมีสิ่วที่กำลัง Aim อยู่
         if (rightHand.TryGetFeatureValue(CommonUsages.triggerButton, out bool triggerPressed)
             && triggerPressed
             && ChiselTool.activeChisel != null)
         {
-            // ✅ เช็คระยะระหว่างค้อนกับสิ่ว
             float distanceToChisel = Vector3.Distance(transform.position, ChiselTool.activeChisel.toolTip.position);
             if (distanceToChisel <= maxHitDistance && Time.time >= nextHitTime)
             {
                 HitWithHammer();
-                nextHitTime = Time.time + hitCooldown; // 🔸 หน่วงเวลาไม่ให้ตี/เสียงซ้ำถี่
+                nextHitTime = Time.time + hitCooldown;
             }
         }
     }
@@ -53,20 +57,19 @@ public class HammerTool : MonoBehaviour
         var chisel = ChiselTool.activeChisel;
         if (chisel == null || !chisel.isAiming) return;
 
-        // คำนวณตำแหน่งกระแทก
         Vector3 hitPosition = toolTip.position + toolTip.TransformDirection(toolTipOffset);
 
-        // เอฟเฟกต์ตอนตี (ฝุ่น/ประกาย)
+        // เอฟเฟกต์ตอนตี
         if (chisel.hitEffect != null)
         {
             chisel.hitEffect.transform.position = chisel.aimPoint;
             chisel.hitEffect.Play();
         }
 
-        // ✅ เล่นเสียงค้อน (ปรับให้สมูทและไม่ overlap)
+        // ✅ เสียงค้อน (เล่นได้แค่ตอนตี)
         SoundManager.PlaySound(SoundType.Hammer);
 
-        // ตรวจว่าสิ่งที่ตีเป็นดินหรือฟอสซิล
+        // ตรวจการชน
         RaycastHit[] hits = Physics.SphereCastAll(
             hitPosition,
             hitRadius,
@@ -78,22 +81,15 @@ public class HammerTool : MonoBehaviour
         foreach (var hit in hits)
         {
             if (hit.collider.TryGetComponent<SoilBlock>(out var soilBlock))
-            {
                 soilBlock.TakeDamage(hitForce);
-            }
             else if (hit.collider.TryGetComponent<Fossil>(out var fossil))
-            {
                 fossil.TakeDamage(hitForce, ToolType.Chisel);
-            }
         }
 
-        // ✅ Spawn เศษดิน (จำนวนน้อย)
+        // Spawn ดิน
         SpawnDirt(hitPosition);
     }
 
-    /// <summary>
-    /// สร้างเศษดินหลังจากตี
-    /// </summary>
     private void SpawnDirt(Vector3 position)
     {
         if (dirtPrefab == null) return;
@@ -101,9 +97,8 @@ public class HammerTool : MonoBehaviour
         for (int i = 0; i < dirtSpawnCount; i++)
         {
             GameObject dirt = Instantiate(dirtPrefab, position, Random.rotation);
-            dirt.tag = "DirtChunk"; // ให้ Brush ลบได้
+            dirt.tag = "DirtChunk";
 
-            // เพิ่มแรงสุ่มให้ดินกระเด้งออกไปเล็กน้อย
             if (dirt.TryGetComponent<Rigidbody>(out Rigidbody rb))
             {
                 Vector3 randomDir = new Vector3(
@@ -114,5 +109,19 @@ public class HammerTool : MonoBehaviour
                 rb.AddForce(randomDir * Random.Range(1f, 3f), ForceMode.Impulse);
             }
         }
+    }
+
+    // ✅ เรียกจาก XR Grab Interactable
+    public void OnGrabbed()
+    {
+        isGrabbed = true;
+        Debug.Log("Hammer grabbed!");
+    }
+
+    // ✅ เรียกจาก XR Grab Interactable
+    public void OnReleased()
+    {
+        isGrabbed = false;
+        Debug.Log("Hammer released!");
     }
 }
