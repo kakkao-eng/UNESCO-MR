@@ -75,15 +75,24 @@ public class UIManager : MonoBehaviour
     /// ให้ ToolBox เปิดและแสดงปุ่ม Start
     /// </summary>
     public void OpenToolBoxFromMR()
-    {
-        FivetoolObject.SetActive(true);
-        toolPanel.SetActive(true);           // แสดง UI เครื่องมือ
-        startButton.gameObject.SetActive(true); // แสดงปุ่ม Start
-        toolBoxObject.SetActive(false);      // ซ่อน ToolBox ออกจากฉาก
-        SoundManager.PlaySound(SoundType.ClickBox);
-        SoundManager.PlaySound(SoundType.V2tutorial);
-        Debug.Log("ToolBox opened - Start button shown");
-    }
+{
+    FivetoolObject.SetActive(true);
+    toolPanel.SetActive(true);           // แสดง UI เครื่องมือ
+    startButton.gameObject.SetActive(true); // แสดงปุ่ม Start
+    toolBoxObject.SetActive(false);      // ซ่อน ToolBox ออกจากฉาก
+
+    // 🔊 เรียก Coroutine เล่นเสียงต่อเนื่อง
+    StartCoroutine(PlayOpenBoxSoundSequence());
+
+    Debug.Log("ToolBox opened - Start button shown");
+}
+
+private IEnumerator PlayOpenBoxSoundSequence()
+{
+    SoundManager.PlaySound(SoundType.ClickBoxSound); // 🔊 เล่นเสียงแรก
+    yield return new WaitForSeconds(1.0f);         // ⏳ หน่วงให้เสียงแรกจบก่อน
+    SoundManager.PlaySound(SoundType.ClickOpenBox);    // 🔊 เล่นเสียงที่สอง
+}
 
     /// <summary>
     /// เริ่มเกมเมื่อต้องการ

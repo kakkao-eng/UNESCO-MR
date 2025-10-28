@@ -8,7 +8,8 @@ public enum SoundType
 {
     Background,
     ClickButton,
-    ClickBox,
+    ClickBoxSound,
+    ClickOpenBox,
     WinGameSound,
     LoseGameSound,
     WarningTime,
@@ -101,8 +102,8 @@ public enum SoundType
                 instance.audioSource.Stop();
             }
         }
-        
-        // ฟังก์ชันสำหรับหยุดเสียงวนลูป (สำหรับ BGM และ Tool Loop)
+
+    // ฟังก์ชันสำหรับหยุดเสียงวนลูป (สำหรับ BGM และ Tool Loop)
         public static void StopLoopSound() // <--- เพิ่มฟังก์ชันนี้
         {
             if (instance.loopAudioSource.isPlaying)
@@ -110,7 +111,13 @@ public enum SoundType
                 instance.loopAudioSource.Stop();
             }
         }
-
+        public AudioClip GetClip(SoundType soundType)
+        {
+            if (soundlist == null || soundlist.Length == 0) return null;
+            var clips = soundlist[(int)soundType].Sounds;
+            if (clips == null || clips.Length == 0) return null;
+            return clips[0]; // ดึงคลิปแรก
+        }
 
     #if UNITY_EDITOR
         //ฟังก์ชันนี้จะทำงานเฉพาะใน Unity Editor เท่านั้น (ไม่มีการแก้ไข)
@@ -127,11 +134,11 @@ public enum SoundType
     #endif
     }
 
-    //โครงสร้างข้อมูลสำหรับเก็บเสียงของแต่ละประเภท (ไม่มีการแก้ไข)
-    [Serializable]
-    public struct Soundlist
-    {
-        public AudioClip[] Sounds { get => sounds; }
-        [HideInInspector] public string name; 
-        [SerializeField] private AudioClip[] sounds; 
-    }
+//โครงสร้างข้อมูลสำหรับเก็บเสียงของแต่ละประเภท (ไม่มีการแก้ไข)
+[Serializable]
+public struct Soundlist
+{
+    public AudioClip[] Sounds { get => sounds; }
+    [HideInInspector] public string name;
+    [SerializeField] private AudioClip[] sounds;
+}

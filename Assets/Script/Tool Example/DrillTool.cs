@@ -28,7 +28,7 @@ public class DrillTool : MonoBehaviour
     private bool isGrabbed = false;
     private InputDevice rightHand;
 
-    private bool soundPlaying = false;
+    private AudioSource drillAudio; // 🔊 เพิ่ม AudioSource สำหรับเสียงเจาะเฉพาะตัว
 
     private void Start()
     {
@@ -41,10 +41,23 @@ public class DrillTool : MonoBehaviour
         if (drillParticles != null)
             drillParticles.Stop();
 
+        // ตั้ง Layer
         soilLayerMask = 1 << LayerMask.NameToLayer("Soil");
         fossilLayerMask = 1 << LayerMask.NameToLayer("Fossil");
 
+        // ดึง Input มือขวา
         rightHand = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
+
+        // 🎧 เพิ่ม AudioSource เฉพาะตัวเครื่องมือ
+        drillAudio = gameObject.AddComponent<AudioSource>();
+        drillAudio.loop = true;
+        drillAudio.playOnAwake = false;
+        drillAudio.volume = 1f;
+
+        // ✅ โหลดเสียงจาก SoundManager (เสียงแรกของ Drill)
+        var clips = FindObjectOfType<SoundManager>()?.GetClip(SoundType.Drill);
+        if (clips != null)
+            drillAudio.clip = clips;
     }
 
     private void Update()
@@ -56,14 +69,11 @@ public class DrillTool : MonoBehaviour
             return;
         }
 
-        // ตรวจจับการกด Trigger
+        // ตรวจจับ Trigger
         if (rightHand.TryGetFeatureValue(CommonUsages.triggerButton, out bool triggerPressed) && triggerPressed)
         {
             if (!isDrilling)
-            {
                 StartDrilling();
-                PlayDrillSound();
-            }
 
             if (Time.time >= nextDrillTime)
             {
@@ -75,46 +85,33 @@ public class DrillTool : MonoBehaviour
         {
             if (isDrilling)
                 StopDrilling();
-
-            StopDrillSound();
         }
     }
 
     private void StartDrilling()
     {
         isDrilling = true;
+
         if (drillParticles != null)
             drillParticles.Play();
+
+        // 🔊 เล่นเสียงเจาะต่อเนื่อง (เฉพาะ Drill)
+        if (drillAudio != null && !drillAudio.isPlaying)
+            drillAudio.Play();
     }
 
     private void StopDrilling()
     {
         isDrilling = false;
+
         if (drillParticles != null)
             drillParticles.Stop();
+
+        // 🔇 หยุดเสียงทันทีเมื่อปล่อย Trigger
+        if (drillAudio != null && drillAudio.isPlaying)
+            drillAudio.Stop();
     }
 
-    private void PlayDrillSound()
-    {
-        // ตรวจสอบก่อนว่าไม่ได้เล่นอยู่
-        if (!soundPlaying)
-        {
-            SoundManager.PlayLoop(SoundType.Drill);
-            soundPlaying = true;
-        }
-    }
-
-    private void StopDrillSound()
-    {
-        // ตรวจสอบว่าเสียงสว่านกำลังเล่นหรือไม่ ก่อนสั่งหยุด
-        if (soundPlaying) // ใช้ soundPlaying ที่เราควบคุมเอง
-        {
-            SoundManager.StopLoopSound(); // สั่งหยุด AudioSource ที่ใช้ Loop
-            soundPlaying = false;
-        }
-    }
-
-    // ✅ ฟังก์ชันหลัก — ขุดเฉพาะดินจริง / ฟอสซิล (ไม่ขุด DirtChunk)
     private void PerformDrill()
     {
         if (soilGenerator == null) return;
@@ -123,7 +120,7 @@ public class DrillTool : MonoBehaviour
         {
             GameObject hitObject = hit.collider.gameObject;
 
-            // ❌ ถ้าเจอวัตถุที่เป็นเศษดิน (DirtChunk) → ไม่ต้องทำอะไร
+            // ❌ ไม่ให้ขุดซ้ำเศษดิน
             if (hitObject.CompareTag("DirtChunk"))
                 return;
 
@@ -159,7 +156,7 @@ public class DrillTool : MonoBehaviour
         for (int i = 0; i < dirtSpawnCount; i++)
         {
             GameObject dirt = Instantiate(dirtPrefab, position, Random.rotation);
-            dirt.tag = "DirtChunk"; // ตั้ง Tag ให้ Brush ลบได้
+            dirt.tag = "DirtChunk";
 
             if (dirt.TryGetComponent<Rigidbody>(out Rigidbody rb))
             {
@@ -173,18 +170,16 @@ public class DrillTool : MonoBehaviour
         }
     }
 
-    // ✅ Event จาก XR Grab Interactable
     public void OnGrabbed()
     {
         isGrabbed = true;
-        Debug.Log("Drill grabbed!");
+        Debug.Log("🪓 Drill grabbed!");
     }
 
     public void OnReleased()
     {
         isGrabbed = false;
         StopDrilling();
-        StopDrillSound();
-        Debug.Log("Drill released!");
+        Debug.Log("🪓 Drill released!");
     }
 }
