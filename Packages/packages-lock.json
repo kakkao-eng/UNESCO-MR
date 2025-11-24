@@ -362,7 +362,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.picoxr": {
-      "version": "file:/Users/incamteccorporation/Downloads/PICO Unity Integration SDK-3.3.0-20250917",
+      "version": "file:/Users/incamteccorporation/Downloads/PICO Unity Integration SDK-3.3.2-20251111",
       "depth": 0,
       "source": "local",
       "dependencies": {
