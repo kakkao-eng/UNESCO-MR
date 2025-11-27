@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Game.unity
     guid: a1f4ecd9f5d61dc4bbd01272d47d68a0
   - enabled: 0
+    path: Assets/Scenes/NewUNESCO_MR.unity
+    guid: b4bb9213bd6f647e7a50868cb10815a0
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 55daccc09a3b69647bbab145b54a3ab3
   m_configObjects:
